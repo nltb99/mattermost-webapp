@@ -22,7 +22,25 @@ interface PasswordConfig {
 type State = {
     serverErrorPassword: React.ReactNode;
     serverErrorCurrentUsername: React.ReactNode;
+    serverErrorCurrentEmail: React.ReactNode;
+};
+
+type Props = {
+    user?: UserProfile;
+    currentUserId: string;
+    show: boolean;
+    onModalSubmit: (user?: UserProfile) => void;
+    onModalDismissed: () => void;
+    passwordConfig: PasswordConfig;
+    actions: {
+        createUser: (
+            user: UserProfile,
+            token: string,
+            inviteId: string,
+            redirect: string
+        ) => ActionFunc;
     };
+};
 
 export default class CreateUserModal extends React.PureComponent<Props, State> {
     private emailRef: React.RefObject<HTMLInputElement>;
