@@ -18,6 +18,9 @@ export function getCurrentLocale(state: GlobalState): string {
         localeFromParam && I18n.isLanguageAvailable(localeFromParam) ? localeFromParam : getConfig(state).DefaultClientLocale;
 
     const currentLocale: string = getCurrentUserLocale(state, defaultLocale);
+
+    // ?
+    return 'vi';
     if (I18n.isLanguageAvailable(currentLocale)) {
         return currentLocale;
     }

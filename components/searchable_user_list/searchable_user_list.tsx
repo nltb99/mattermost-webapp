@@ -31,6 +31,7 @@ type Props = {
         enableUserAccessTokens: boolean;
         experimentalEnableAuthenticationTransfer: boolean;
         doPasswordReset: (user: UserProfile) => void;
+        doCreateUser: () => void;
         doEmailReset: (user: UserProfile) => void;
         doManageTeams: (user: UserProfile) => void;
         doManageRoles: (user: UserProfile) => void;
@@ -45,9 +46,19 @@ type Props = {
         };
     };
     focusOnMount?: boolean;
-    renderCount?: (count: number, total: number, startCount: number, endCount: number, isSearch: boolean) => JSX.Element | null;
+    renderCount?: (
+        count: number,
+        total: number,
+        startCount: number,
+        endCount: number,
+        isSearch: boolean
+    ) => JSX.Element | null;
     filter?: string;
-    renderFilterRow?: (handleFilter: ((event: React.FormEvent<HTMLInputElement>) => void) | undefined) => JSX.Element;
+    renderFilterRow?: (
+        handleFilter:
+        | ((event: React.FormEvent<HTMLInputElement>) => void)
+        | undefined
+    ) => JSX.Element;
     page: number;
     term: string;
     onTermChange: (term: string) => void;
@@ -56,7 +67,7 @@ type Props = {
 
     // the type of user list row to render
     rowComponentType?: React.ComponentType<any>;
-}
+};
 
 const renderView = (props: Record<string, unknown>): JSX.Element => (
     <div
@@ -65,9 +76,7 @@ const renderView = (props: Record<string, unknown>): JSX.Element => (
     />
 );
 
-const renderThumbHorizontal = (): JSX.Element => (
-    <div/>
-);
+const renderThumbHorizontal = (): JSX.Element => <div/>;
 
 const renderThumbVertical = (props: Record<string, unknown>): JSX.Element => (
     <div
@@ -91,6 +100,7 @@ class SearchableUserList extends React.PureComponent<Props, State> {
             enableUserAccessTokens: false,
             experimentalEnableAuthenticationTransfer: false,
             doPasswordReset() {},
+            doCreateUser() {},
             doEmailReset() {},
             doManageTeams() {},
             doManageRoles() {},
@@ -120,14 +130,17 @@ class SearchableUserList extends React.PureComponent<Props, State> {
 
     public scrollToTop = (): void => {
         this.scrollbarsRef.current?.scrollToTop();
-    }
+    };
 
     componentDidMount() {
         this.focusSearchBar();
     }
 
     componentDidUpdate(prevProps: Props) {
-        if (this.props.page !== prevProps.page || this.props.term !== prevProps.term) {
+        if (
+            this.props.page !== prevProps.page ||
+            this.props.term !== prevProps.term
+        ) {
             this.scrollToTop();
         }
     }
@@ -140,31 +153,34 @@ class SearchableUserList extends React.PureComponent<Props, State> {
         e.preventDefault();
 
         this.setState({nextDisabled: true});
-        this.nextTimeoutId = setTimeout(() => this.setState({nextDisabled: false}), NEXT_BUTTON_TIMEOUT);
+        this.nextTimeoutId = setTimeout(
+            () => this.setState({nextDisabled: false}),
+            NEXT_BUTTON_TIMEOUT,
+        );
 
         this.props.nextPage();
         this.scrollToTop();
-    }
+    };
 
     previousPage = (e: React.MouseEvent) => {
         e.preventDefault();
 
         this.props.previousPage();
         this.scrollToTop();
-    }
+    };
 
     focusSearchBar = () => {
         if (this.props.focusOnMount && this.filterRef.current) {
             this.filterRef.current.focus();
         }
-    }
+    };
 
     handleInput = (e: React.FormEvent<HTMLInputElement> | undefined) => {
         if (e) {
             this.props.onTermChange(e.currentTarget.value);
             this.props.search(e.currentTarget.value);
         }
-    }
+    };
 
     renderCount = (users: UserProfile[] | null | undefined) => {
         if (!users || !this.props.users) {
@@ -193,7 +209,13 @@ class SearchableUserList extends React.PureComponent<Props, State> {
         }
 
         if (this.props.renderCount) {
-            return this.props.renderCount(count, this.props.total, startCount, endCount, isSearch);
+            return this.props.renderCount(
+                count,
+                this.props.total,
+                startCount,
+                endCount,
+                isSearch,
+            );
         }
 
         if (this.props.total) {
@@ -225,7 +247,7 @@ class SearchableUserList extends React.PureComponent<Props, State> {
         }
 
         return null;
-    }
+    };
 
     render() {
         let nextButton;
@@ -280,7 +302,10 @@ class SearchableUserList extends React.PureComponent<Props, State> {
         if (this.props.renderFilterRow) {
             filterRow = this.props.renderFilterRow(this.handleInput);
         } else {
-            const searchUsersPlaceholder = {id: t('filtered_user_list.search'), defaultMessage: 'Search users'};
+            const searchUsersPlaceholder = {
+                id: t('filtered_user_list.search'),
+                defaultMessage: 'Search users',
+            };
             filterRow = (
                 <div className='col-xs-12'>
                     <label
@@ -300,7 +325,9 @@ class SearchableUserList extends React.PureComponent<Props, State> {
                         inputComponent={LocalizedInput}
                         value={this.props.term}
                         onInput={this.handleInput}
-                        aria-label={formatMessage(searchUsersPlaceholder).toLowerCase()}
+                        aria-label={formatMessage(
+                            searchUsersPlaceholder,
+                        ).toLowerCase()}
                     />
                 </div>
             );
@@ -318,6 +345,14 @@ class SearchableUserList extends React.PureComponent<Props, State> {
                         >
                             {this.renderCount(usersToDisplay)}
                         </span>
+                        <button
+                            className=' pull-right'
+                            onClick={this.props.actionProps?.doCreateUser}
+                            style={{marginTop: 5}}
+                        >
+                            {/* {t('admin.userManagement.createUser.createUser')} */}
+                             Tạo User
+                        </button>
                     </div>
                 </div>
                 <div className='more-modal__list'>

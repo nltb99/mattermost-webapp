@@ -15,6 +15,7 @@ import ManageRolesModal from 'components/admin_console/manage_roles_modal';
 import ManageTeamsModal from 'components/admin_console/manage_teams_modal';
 import ManageTokensModal from 'components/admin_console/manage_tokens_modal';
 import ResetPasswordModal from 'components/admin_console/reset_password_modal';
+import CreateUserModal from 'components/admin_console/create_user_modal';
 import ResetEmailModal from 'components/admin_console/reset_email_modal';
 import SearchableUserList from 'components/searchable_user_list/searchable_user_list';
 import UserListRowWithError from 'components/user_list_row_with_error';
@@ -30,7 +31,11 @@ type Props = {
     nextPage: (page: number) => void;
     search: (term: string) => void;
     focusOnMount?: boolean;
-    renderFilterRow: (doSearch: ((event: React.FormEvent<HTMLInputElement>) => void) | undefined) => JSX.Element;
+    renderFilterRow: (
+        doSearch:
+        | ((event: React.FormEvent<HTMLInputElement>) => void)
+        | undefined
+    ) => JSX.Element;
 
     teamId: string;
     filter: string;
@@ -66,6 +71,7 @@ type State = {
     showManageRolesModal: boolean;
     showManageTokensModal: boolean;
     showPasswordModal: boolean;
+    showCreateUserModal: boolean;
     showEmailModal: boolean;
     user?: UserProfile;
 };
@@ -88,8 +94,14 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         };
     }
 
-    static getDerivedStateFromProps(nextProps: Props, prevState: State): { page: number; teamId: string; filter: string } | null {
-        if (prevState.teamId !== nextProps.teamId || prevState.filter !== nextProps.filter) {
+    static getDerivedStateFromProps(
+        nextProps: Props,
+        prevState: State,
+    ): {page: number; teamId: string; filter: string} | null {
+        if (
+            prevState.teamId !== nextProps.teamId ||
+            prevState.filter !== nextProps.filter
+        ) {
             return {
                 page: 0,
                 teamId: nextProps.teamId,
@@ -103,11 +115,11 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         this.setState({page: this.state.page + 1});
 
         this.props.nextPage(this.state.page + 1);
-    }
+    };
 
     previousPage = () => {
         this.setState({page: this.state.page - 1});
-    }
+    };
 
     search = (term: string) => {
         this.props.search(term);
@@ -115,63 +127,69 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         if (term !== '') {
             this.setState({page: 0});
         }
-    }
+    };
 
     doManageTeams = (user: UserProfile) => {
         this.setState({
             showManageTeamsModal: true,
             user,
         });
-    }
+    };
 
     doManageRoles = (user: UserProfile) => {
         this.setState({
             showManageRolesModal: true,
             user,
         });
-    }
+    };
 
     doManageTokens = (user: UserProfile) => {
         this.setState({
             showManageTokensModal: true,
             user,
         });
-    }
+    };
 
     doManageTeamsDismiss = () => {
         this.setState({
             showManageTeamsModal: false,
             user: undefined,
         });
-    }
+    };
 
     doManageRolesDismiss = () => {
         this.setState({
             showManageRolesModal: false,
             user: undefined,
         });
-    }
+    };
 
     doManageTokensDismiss = () => {
         this.setState({
             showManageTokensModal: false,
             user: undefined,
         });
-    }
+    };
 
     doPasswordReset = (user: UserProfile) => {
         this.setState({
             showPasswordModal: true,
             user,
         });
-    }
+    };
+
+    doCreateUser = () => {
+        this.setState({
+            showCreateUserModal: true,
+        });
+    };
 
     doPasswordResetDismiss = () => {
         this.setState({
             showPasswordModal: false,
             user: undefined,
         });
-    }
+    };
 
     doPasswordResetSubmit = (user?: UserProfile) => {
         if (user) {
@@ -182,21 +200,37 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
             showPasswordModal: false,
             user: undefined,
         });
-    }
+    };
+
+    doCreateUserDismiss = () => {
+        this.setState({
+            showCreateUserModal: false,
+        });
+    };
+
+    doCreateUserSubmit = (user?: UserProfile) => {
+        if (user) {
+            this.props.actions.getUser(user.id);
+        }
+
+        this.setState({
+            showCreateUserModal: false,
+        });
+    };
 
     doEmailReset = (user: UserProfile) => {
         this.setState({
             showEmailModal: true,
             user,
         });
-    }
+    };
 
     doEmailResetDismiss = () => {
         this.setState({
             showEmailModal: false,
             user: undefined,
         });
-    }
+    };
 
     doEmailResetSubmit = (user?: UserProfile) => {
         if (user) {
@@ -207,14 +241,17 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
             showEmailModal: false,
             user: undefined,
         });
-    }
+    };
 
     getInfoForUser(user: UserProfile) {
         const info = [];
 
         if (user.auth_service) {
             let service;
-            if (user.auth_service === Constants.LDAP_SERVICE || user.auth_service === Constants.SAML_SERVICE) {
+            if (
+                user.auth_service === Constants.LDAP_SERVICE ||
+                user.auth_service === Constants.SAML_SERVICE
+            ) {
                 service = user.auth_service.toUpperCase();
             } else {
                 service = Utils.toTitleCase(user.auth_service);
@@ -278,7 +315,13 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         return info;
     }
 
-    renderCount(count: number, total: number, startCount: number, endCount: number, isSearch: boolean) {
+    renderCount(
+        count: number,
+        total: number,
+        startCount: number,
+        endCount: number,
+        isSearch: boolean,
+    ) {
         if (total) {
             if (isSearch) {
                 return (
@@ -337,9 +380,12 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
                     actions={[SystemUsersDropdown]}
                     actionProps={{
                         mfaEnabled: this.props.mfaEnabled,
-                        enableUserAccessTokens: this.props.enableUserAccessTokens,
-                        experimentalEnableAuthenticationTransfer: this.props.experimentalEnableAuthenticationTransfer,
+                        enableUserAccessTokens:
+                            this.props.enableUserAccessTokens,
+                        experimentalEnableAuthenticationTransfer:
+                            this.props.experimentalEnableAuthenticationTransfer,
                         doPasswordReset: this.doPasswordReset,
+                        doCreateUser: this.doCreateUser,
                         doEmailReset: this.doEmailReset,
                         doManageTeams: this.doManageTeams,
                         doManageRoles: this.doManageRoles,
@@ -375,6 +421,12 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
                     show={this.state.showPasswordModal}
                     onModalSubmit={this.doPasswordResetSubmit}
                     onModalDismissed={this.doPasswordResetDismiss}
+                />
+                <CreateUserModal
+                    user={this.state.user}
+                    show={this.state.showCreateUserModal}
+                    onModalSubmit={this.doCreateUserSubmit}
+                    onModalDismissed={this.doCreateUserDismiss}
                 />
                 <ResetEmailModal
                     user={this.state.user}
