@@ -259,6 +259,7 @@ export default class CreateUserModal extends React.PureComponent<Props, State> {
                                     </span>
                                     <input
                                         ref={this.emailRef}
+                                        type='email'
                                         className='form-control'
                                         autoFocus={true}
                                     />
