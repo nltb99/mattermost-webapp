@@ -2505,14 +2505,6 @@
   "admin.user_item.userAccessTokenPostAll": "(Có thể tạo bài đăng: Tất cả các mã thông báo truy cập cá nhân)",
   "admin.user_item.userAccessTokenPostAllPublic": "(Có thể tạo bài đăng: Kênh mã thông báo truy cập cá nhân)",
   "admin.user_item.userAccessTokenYes": "(có thể tạo mã thông báo truy cập cá nhân)",
-  "admin.userManagement.createUser.createUser": "Tạo Người Dùng",
-  "admin.userManagement.createUser.email": "Email",
-  "admin.userManagement.createUser.username": "Username",
-  "admin.userManagement.createUser.password": "Password",
-  "admin.userManagement.createUser.cancel": "Hủy",
-  "admin.userManagement.createUser.create": "Tạo",
-  "admin.userManagement.createUser.missing_email": "Hãy nhập email.",
-  "admin.userManagement.createUser.missing_username": "Hãy nhập username.",
   "admin.userManagement.userDetail.addTeam": "Thêm nhóm",
   "admin.userManagement.userDetail.authenticationMethod": "Phương pháp xác thực",
   "admin.userManagement.userDetail.email": "E-mail",
@@ -5666,5 +5658,14 @@
   "workspace_limits.teams_limit_reached.view_upgrade_options": "Xem tùy chọn nâng cấp",
   "workspace_limits.upgrade": "Upgrade to avoid {planName} data limits",
   "workspace_limits.upgrade_reasons.free": "{planName} is restricted to {messagesLimit} message history and {storageLimit} file storage. You can delete items to free up space or upgrade to a paid plan.",
-  "yourcomputer": "Máy tính của bạn"
+  "yourcomputer": "Máy tính của bạn",
+
+  "admin.userManagement.createUser.createUser": "Tạo Người Dùng",
+  "admin.userManagement.createUser.email": "Email",
+  "admin.userManagement.createUser.username": "Username",
+  "admin.userManagement.createUser.password": "Password",
+  "admin.userManagement.createUser.cancel": "Hủy",
+  "admin.userManagement.createUser.create": "Tạo",
+  "admin.userManagement.createUser.missing_email": "Hãy nhập email.",
+  "admin.userManagement.createUser.missing_username": "Hãy nhập username."
 }

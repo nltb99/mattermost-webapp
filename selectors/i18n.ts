@@ -19,7 +19,7 @@ export function getCurrentLocale(state: GlobalState): string {
 
     const currentLocale: string = getCurrentUserLocale(state, defaultLocale);
 
-    // ?
+    // TODO ?
     return 'vi';
     if (I18n.isLanguageAvailable(currentLocale)) {
         return currentLocale;

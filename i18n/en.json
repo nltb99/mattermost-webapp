@@ -2505,14 +2505,6 @@
   "admin.user_item.userAccessTokenPostAll": "(can create post:all personal access tokens)",
   "admin.user_item.userAccessTokenPostAllPublic": "(can create post:channels personal access tokens)",
   "admin.user_item.userAccessTokenYes": "(can create personal access tokens)",
-  "admin.userManagement.createUser.createUser": "Create User",
-  "admin.userManagement.createUser.cancel": "Cancel",
-  "admin.userManagement.createUser.create": "Create",
-  "admin.userManagement.createUser.email": "Email",
-  "admin.userManagement.createUser.missing_email": "Please enter your email.",
-  "admin.userManagement.createUser.missing_username": "Please enter your username.",
-  "admin.userManagement.createUser.password": "Password",
-  "admin.userManagement.createUser.username": "Username",
   "admin.userManagement.userDetail.addTeam": "Add Team",
   "admin.userManagement.userDetail.authenticationMethod": "Authentication Method",
   "admin.userManagement.userDetail.email": "Email",
@@ -5666,5 +5658,14 @@
   "workspace_limits.teams_limit_reached.view_upgrade_options": "View upgrade options",
   "workspace_limits.upgrade": "Upgrade to avoid {planName} data limits",
   "workspace_limits.upgrade_reasons.free": "{planName} is restricted to {messagesLimit} message history and {storageLimit} file storage. You can delete items to free up space or upgrade to a paid plan.",
-  "yourcomputer": "Your computer"
+  "yourcomputer": "Your computer",
+
+  "admin.userManagement.createUser.createUser": "Create User",
+  "admin.userManagement.createUser.cancel": "Cancel",
+  "admin.userManagement.createUser.create": "Create",
+  "admin.userManagement.createUser.email": "Email",
+  "admin.userManagement.createUser.missing_email": "Please enter your email.",
+  "admin.userManagement.createUser.missing_username": "Please enter your username.",
+  "admin.userManagement.createUser.password": "Password",
+  "admin.userManagement.createUser.username": "Username"
 }
