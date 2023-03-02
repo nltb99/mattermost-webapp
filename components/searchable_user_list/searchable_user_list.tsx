@@ -350,9 +350,10 @@ class SearchableUserList extends React.PureComponent<Props, State> {
                             onClick={this.props.actionProps?.doCreateUser}
                             style={{marginTop: 5}}
                         >
-                            {/* // TODO ? */}
-                            {/* {t('admin.userManagement.createUser.createUser')} */}
-                             Tạo User
+                            <FormattedMessage
+                                id='admin.userManagement.createUser.createUser'
+                                defaultMessage='Create User'
+                            />
                         </button>
                     </div>
                 </div>

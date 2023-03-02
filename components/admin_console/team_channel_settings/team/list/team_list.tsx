@@ -160,6 +160,12 @@ export default class TeamList extends React.PureComponent<Props, State> {
                 defaultMessage='Name'
             />
         );
+        const code = (
+            <FormattedMessage
+                id='admin.team_settings.team.team_code'
+                defaultMessage='Team Code'
+            />
+        );
         const management = (
             <FormattedMessage
                 id='admin.team_settings.team_list.mappingHeader'
@@ -172,6 +178,13 @@ export default class TeamList extends React.PureComponent<Props, State> {
                 name,
                 field: 'name',
                 width: 4,
+                fixed: true,
+            },
+            // TODO ? Team Code
+            {
+                name: code,
+                field: 'code',
+                width: 2,
                 fixed: true,
             },
             {
@@ -252,6 +265,9 @@ export default class TeamList extends React.PureComponent<Props, State> {
                                 )}
                             </div>
                         </div>
+                    ),
+                    code: (
+                        <span>{team.id}</span>
                     ),
                     management: (
                         <span

@@ -267,146 +267,147 @@ const getRestrictedIndicator = (displayBlocked = false, minimumPlanRequiredForFe
     shouldDisplay: (license, subscriptionProduct) => displayBlocked || (isCloudLicense(license) && subscriptionProduct?.sku === CloudProducts.STARTER),
 });
 
+// TODO ?
 const AdminDefinition = {
-    about: {
-        icon: (
-            <InformationOutlineIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.about'),
-        sectionTitleDefault: 'About',
-        isHidden: it.any(
-            it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-            it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.ABOUT)),
-        ),
-        license: {
-            url: 'about/license',
-            title: t('admin.sidebar.license'),
-            title_default: 'Edition and License',
-            searchableStrings: [
-                'admin.license.title',
-                'admin.license.uploadDesc',
-                'admin.license.keyRemove',
-                'admin.license.edition',
-                'admin.license.type',
-                'admin.license.key',
-                'Mattermost Enterprise Edition. Unlock enterprise features in this software through the purchase of a subscription from ',
-                'This software is offered under a commercial license.\n\nSee ENTERPRISE-EDITION-LICENSE.txt in your root install directory for details. See NOTICE.txt for information about open source software used in this system.',
-            ],
-            isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
-            schema: {
-                id: 'LicenseSettings',
-                component: LicenseSettings,
-            },
-        },
-    },
-    billing: {
-        icon: (
-            <CreditCardOutlineIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.billing'),
-        sectionTitleDefault: 'Billing & Account',
-        isHidden: it.any(
-            it.not(it.enterpriseReady),
-            it.not(it.userHasReadPermissionOnResource('billing')),
-            it.not(it.licensed),
-            it.all(
-                it.not(it.licensedForFeature('Cloud')),
-                it.configIsFalse('ServiceSettings', 'SelfHostedPurchase'),
-            ),
-        ),
-        subscription: {
-            url: 'billing/subscription',
-            title: t('admin.sidebar.subscription'),
-            title_default: 'Subscription',
-            searchableStrings: [
-                'admin.billing.subscription.title',
-            ],
-            schema: {
-                id: 'BillingSubscriptions',
-                component: BillingSubscriptions,
-            },
+    // about: {
+    //     icon: (
+    //         <InformationOutlineIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.about'),
+    //     sectionTitleDefault: 'About',
+    //     isHidden: it.any(
+    //         it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //         it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.ABOUT)),
+    //     ),
+    //     license: {
+    //         url: 'about/license',
+    //         title: t('admin.sidebar.license'),
+    //         title_default: 'Edition and License',
+    //         searchableStrings: [
+    //             'admin.license.title',
+    //             'admin.license.uploadDesc',
+    //             'admin.license.keyRemove',
+    //             'admin.license.edition',
+    //             'admin.license.type',
+    //             'admin.license.key',
+    //             'Mattermost Enterprise Edition. Unlock enterprise features in this software through the purchase of a subscription from ',
+    //             'This software is offered under a commercial license.\n\nSee ENTERPRISE-EDITION-LICENSE.txt in your root install directory for details. See NOTICE.txt for information about open source software used in this system.',
+    //         ],
+    //         isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+    //         schema: {
+    //             id: 'LicenseSettings',
+    //             component: LicenseSettings,
+    //         },
+    //     },
+    // },
+    // billing: {
+    //     icon: (
+    //         <CreditCardOutlineIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.billing'),
+    //     sectionTitleDefault: 'Billing & Account',
+    //     isHidden: it.any(
+    //         it.not(it.enterpriseReady),
+    //         it.not(it.userHasReadPermissionOnResource('billing')),
+    //         it.not(it.licensed),
+    //         it.all(
+    //             it.not(it.licensedForFeature('Cloud')),
+    //             it.configIsFalse('ServiceSettings', 'SelfHostedPurchase'),
+    //         ),
+    //     ),
+    //     subscription: {
+    //         url: 'billing/subscription',
+    //         title: t('admin.sidebar.subscription'),
+    //         title_default: 'Subscription',
+    //         searchableStrings: [
+    //             'admin.billing.subscription.title',
+    //         ],
+    //         schema: {
+    //             id: 'BillingSubscriptions',
+    //             component: BillingSubscriptions,
+    //         },
 
-            // cloud only view
-            isHidden: it.not(it.licensedForFeature('Cloud')),
-            isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
-        },
-        billing_history: {
-            url: 'billing/billing_history',
-            title: t('admin.sidebar.billing_history'),
-            title_default: 'Billing History',
-            searchableStrings: [
-                'admin.billing.history.title',
-            ],
-            schema: {
-                id: 'BillingHistory',
-                component: BillingHistory,
-            },
-            isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
-        },
-        company_info: {
-            url: 'billing/company_info',
-            title: t('admin.sidebar.company_info'),
-            title_default: 'Company Information',
-            searchableStrings: [
-                'admin.billing.company_info.title',
-            ],
-            schema: {
-                id: 'CompanyInfo',
-                component: CompanyInfo,
-            },
+    //         // cloud only view
+    //         isHidden: it.not(it.licensedForFeature('Cloud')),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+    //     },
+    //     billing_history: {
+    //         url: 'billing/billing_history',
+    //         title: t('admin.sidebar.billing_history'),
+    //         title_default: 'Billing History',
+    //         searchableStrings: [
+    //             'admin.billing.history.title',
+    //         ],
+    //         schema: {
+    //             id: 'BillingHistory',
+    //             component: BillingHistory,
+    //         },
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+    //     },
+    //     company_info: {
+    //         url: 'billing/company_info',
+    //         title: t('admin.sidebar.company_info'),
+    //         title_default: 'Company Information',
+    //         searchableStrings: [
+    //             'admin.billing.company_info.title',
+    //         ],
+    //         schema: {
+    //             id: 'CompanyInfo',
+    //             component: CompanyInfo,
+    //         },
 
-            // cloud only view
-            isHidden: it.not(it.licensedForFeature('Cloud')),
-            isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
-        },
-        company_info_edit: {
-            url: 'billing/company_info_edit',
-            schema: {
-                id: 'CompanyInfoEdit',
-                component: CompanyInfoEdit,
-            },
+    //         // cloud only view
+    //         isHidden: it.not(it.licensedForFeature('Cloud')),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+    //     },
+    //     company_info_edit: {
+    //         url: 'billing/company_info_edit',
+    //         schema: {
+    //             id: 'CompanyInfoEdit',
+    //             component: CompanyInfoEdit,
+    //         },
 
-            // cloud only view
-            isHidden: it.not(it.licensedForFeature('Cloud')),
-            isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
-        },
-        payment_info: {
-            url: 'billing/payment_info',
-            title: t('admin.sidebar.payment_info'),
-            title_default: 'Payment Information',
-            isHidden: it.any(
-                it.hidePaymentInfo,
+    //         // cloud only view
+    //         isHidden: it.not(it.licensedForFeature('Cloud')),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+    //     },
+    //     payment_info: {
+    //         url: 'billing/payment_info',
+    //         title: t('admin.sidebar.payment_info'),
+    //         title_default: 'Payment Information',
+    //         isHidden: it.any(
+    //             it.hidePaymentInfo,
 
-                // cloud only view
-                it.not(it.licensedForFeature('Cloud')),
-            ),
-            searchableStrings: [
-                'admin.billing.payment_info.title',
-            ],
-            schema: {
-                id: 'PaymentInfo',
-                component: PaymentInfo,
-            },
-            isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
-        },
-        payment_info_edit: {
-            url: 'billing/payment_info_edit',
-            schema: {
-                id: 'PaymentInfoEdit',
-                component: PaymentInfoEdit,
-            },
-            isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
-        },
-    },
+    //             // cloud only view
+    //             it.not(it.licensedForFeature('Cloud')),
+    //         ),
+    //         searchableStrings: [
+    //             'admin.billing.payment_info.title',
+    //         ],
+    //         schema: {
+    //             id: 'PaymentInfo',
+    //             component: PaymentInfo,
+    //         },
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+    //     },
+    //     payment_info_edit: {
+    //         url: 'billing/payment_info_edit',
+    //         schema: {
+    //             id: 'PaymentInfoEdit',
+    //             component: PaymentInfoEdit,
+    //         },
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('billing')),
+    //     },
+    // },
     reporting: {
         icon: (
             <ChartBarIcon
@@ -721,1300 +722,1300 @@ const AdminDefinition = {
             restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
         },
     },
-    environment: {
-        icon: (
-            <ServerVariantIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.environment'),
-        sectionTitleDefault: 'Environment',
-        isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.ENVIRONMENT)),
-        web_server: {
-            url: 'environment/web_server',
-            title: t('admin.sidebar.webServer'),
-            title_default: 'Web Server',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-            ),
-            schema: {
-                id: 'ServiceSettings',
-                name: t('admin.environment.webServer'),
-                name_default: 'Web Server',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BANNER,
-                        label: t('admin.rate.noteDescription'),
-                        label_default: 'Changing properties in this section will require a server restart before taking effect.',
-                        banner_type: 'info',
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.SiteURL',
-                        label: t('admin.service.siteURL'),
-                        label_default: 'Site URL:',
-                        help_text: t('admin.service.siteURLDescription'),
-                        help_text_default: 'The URL that users will use to access Mattermost. Standard ports, such as 80 and 443, can be omitted, but non-standard ports are required. For example: http://example.com:8065. This setting is required.\n \nMattermost may be hosted at a subpath. For example: http://example.com:8065/company/mattermost. A restart is required before the server will work correctly.',
-                        help_text_markdown: true,
-                        placeholder: t('admin.service.siteURLExample'),
-                        placeholder_default: 'E.g.: "http://example.com:8065"',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BUTTON,
-                        key: 'TestSiteURL',
-                        action: testSiteURL,
-                        label: t('admin.service.testSiteURL'),
-                        label_default: 'Test Live URL',
-                        loading: t('admin.service.testSiteURLTesting'),
-                        loading_default: 'Testing...',
-                        error_message: t('admin.service.testSiteURLFail'),
-                        error_message_default: 'Test unsuccessful: {error}',
-                        success_message: t('admin.service.testSiteURLSuccess'),
-                        success_message_default: 'Test successful. This is a valid URL.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.ListenAddress',
-                        label: t('admin.service.listenAddress'),
-                        label_default: 'Listen Address:',
-                        placeholder: t('admin.service.listenExample'),
-                        placeholder_default: 'E.g.: ":8065"',
-                        help_text: t('admin.service.listenDescription'),
-                        help_text_default: 'The address and port to which to bind and listen. Specifying ":8065" will bind to all network interfaces. Specifying "127.0.0.1:8065" will only bind to the network interface having that IP address. If you choose a port of a lower level (called "system ports" or "well-known ports", in the range of 0-1023), you must have permissions to bind to that port. On Linux you can use: "sudo setcap cap_net_bind_service=+ep ./bin/mattermost" to allow Mattermost to bind to well-known ports.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.Forward80To443',
-                        label: t('admin.service.forward80To443'),
-                        label_default: 'Forward port 80 to 443:',
-                        help_text: t('admin.service.forward80To443Description'),
-                        help_text_default: 'Forwards all insecure traffic from port 80 to secure port 443. Not recommended when using a proxy server.',
-                        disabled_help_text: t('admin.service.forward80To443Description.disabled'),
-                        disabled_help_text_default: 'Forwards all insecure traffic from port 80 to secure port 443. Not recommended when using a proxy server.\n \nThis setting cannot be enabled until your server is [listening](#ListenAddress) on port 443.',
-                        disabled_help_text_markdown: true,
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                            it.not(it.stateMatches('ServiceSettings.ListenAddress', /:443$/)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'ServiceSettings.ConnectionSecurity',
-                        label: t('admin.connectionSecurityTitle'),
-                        label_default: 'Connection Security:',
-                        help_text: DefinitionConstants.CONNECTION_SECURITY_HELP_TEXT_WEBSERVER,
-                        options: [
-                            {
-                                value: '',
-                                display_name: t('admin.connectionSecurityNone'),
-                                display_name_default: 'None',
-                            },
-                            {
-                                value: 'TLS',
-                                display_name: t('admin.connectionSecurityTls'),
-                                display_name_default: 'TLS (Recommended)',
-                            },
-                        ],
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.TLSCertFile',
-                        label: t('admin.service.tlsCertFile'),
-                        label_default: 'TLS Certificate File:',
-                        help_text: t('admin.service.tlsCertFileDescription'),
-                        help_text_default: 'The certificate file to use.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                            it.stateIsTrue('ServiceSettings.UseLetsEncrypt'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.TLSKeyFile',
-                        label: t('admin.service.tlsKeyFile'),
-                        label_default: 'TLS Key File:',
-                        help_text: t('admin.service.tlsKeyFileDescription'),
-                        help_text_default: 'The private key file to use.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                            it.stateIsTrue('ServiceSettings.UseLetsEncrypt'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.UseLetsEncrypt',
-                        label: t('admin.service.useLetsEncrypt'),
-                        label_default: 'Use Let\'s Encrypt:',
-                        help_text: t('admin.service.useLetsEncryptDescription'),
-                        help_text_default: 'Enable the automatic retrieval of certificates from Let\'s Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains.',
-                        disabled_help_text: t('admin.service.useLetsEncryptDescription.disabled'),
-                        disabled_help_text_default: 'Enable the automatic retrieval of certificates from Let\'s Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains.\n \nThis setting cannot be enabled unless the [Forward port 80 to 443](#Forward80To443) setting is set to true.',
-                        disabled_help_text_markdown: true,
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                            it.stateIsFalse('ServiceSettings.Forward80To443'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.LetsEncryptCertificateCacheFile',
-                        label: t('admin.service.letsEncryptCertificateCacheFile'),
-                        label_default: 'Let\'s Encrypt Certificate Cache File:',
-                        help_text: t('admin.service.letsEncryptCertificateCacheFileDescription'),
-                        help_text_default: 'Certificates retrieved and other data about the Let\'s Encrypt service will be stored in this file.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                            it.stateIsFalse('ServiceSettings.UseLetsEncrypt'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'ServiceSettings.ReadTimeout',
-                        label: t('admin.service.readTimeout'),
-                        label_default: 'Read Timeout:',
-                        help_text: t('admin.service.readTimeoutDescription'),
-                        help_text_default: 'Maximum time allowed from when the connection is accepted to when the request body is fully read.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'ServiceSettings.WriteTimeout',
-                        label: t('admin.service.writeTimeout'),
-                        label_default: 'Write Timeout:',
-                        help_text: t('admin.service.writeTimeoutDescription'),
-                        help_text_default: 'If using HTTP (insecure), this is the maximum time allowed from the end of reading the request headers until the response is written. If using HTTPS, it is the total time from when the connection is accepted until the response is written.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'ServiceSettings.WebserverMode',
-                        label: t('admin.webserverModeTitle'),
-                        label_default: 'Webserver Mode:',
-                        help_text: DefinitionConstants.WEBSERVER_MODE_HELP_TEXT,
-                        options: [
-                            {
-                                value: 'gzip',
-                                display_name: t('admin.webserverModeGzip'),
-                                display_name_default: 'gzip',
-                            },
-                            {
-                                value: 'uncompressed',
-                                display_name: t('admin.webserverModeUncompressed'),
-                                display_name_default: 'Uncompressed',
-                            },
-                            {
-                                value: 'disabled',
-                                display_name: t('admin.webserverModeDisabled'),
-                                display_name_default: 'Disabled',
-                            },
-                        ],
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableInsecureOutgoingConnections',
-                        label: t('admin.service.insecureTlsTitle'),
-                        label_default: 'Enable Insecure Outgoing Connections: ',
-                        help_text: t('admin.service.insecureTlsDesc'),
-                        help_text_default: 'When true, any outgoing HTTPS requests will accept unverified, self-signed certificates. For example, outgoing webhooks to a server with a self-signed TLS certificate, using any domain, will be allowed. Note that this makes these connections susceptible to man-in-the-middle attacks.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.ManagedResourcePaths',
-                        label: t('admin.service.managedResourcePaths'),
-                        label_default: 'Managed Resource Paths:',
-                        help_text: t('admin.service.managedResourcePathsDescription'),
-                        help_text_default: 'A comma-separated list of paths on the Mattermost server that are managed by another service. See <link>here</link> for more information.',
-                        help_text_markdown: false,
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/install/desktop-managed-resources.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BUTTON,
-                        action: reloadConfig,
-                        key: 'ReloadConfigButton',
-                        label: t('admin.reload.button'),
-                        label_default: 'Reload Configuration From Disk',
-                        help_text: t('admin.reload.reloadDescription'),
-                        help_text_default: 'Deployments using multiple databases can switch from one master database to another without restarting the Mattermost server by updating "config.json" to the new desired configuration and using the {featureName} feature to load the new settings while the server is running. The administrator should then use the {recycleDatabaseConnections} feature to recycle the database connections based on the new settings.',
-                        help_text_values: {
-                            featureName: (
-                                <b>
-                                    <FormattedMessage
-                                        id='admin.reload.reloadDescription.featureName'
-                                        defaultMessage='Reload Configuration from Disk'
-                                    />
-                                </b>
-                            ),
-                            recycleDatabaseConnections: (
-                                <a href='../environment/database'>
-                                    <b>
-                                        <FormattedMessage
-                                            id='admin.reload.reloadDescription.recycleDatabaseConnections'
-                                            defaultMessage='Environment > Database > Recycle Database Connections'
-                                        />
-                                    </b>
-                                </a>
-                            ),
-                        },
-                        error_message: t('admin.reload.reloadFail'),
-                        error_message_default: 'Reload unsuccessful: {error}',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BUTTON,
-                        key: 'PurgeButton',
-                        action: invalidateAllCaches,
-                        label: t('admin.purge.button'),
-                        label_default: 'Purge All Caches',
-                        help_text: t('admin.purge.purgeDescription'),
-                        help_text_default: 'This will purge all the in-memory caches for things like sessions, accounts, channels, etc. Deployments using High Availability will attempt to purge all the servers in the cluster.  Purging the caches may adversely impact performance.',
-                        error_message: t('admin.purge.purgeFail'),
-                        error_message_default: 'Purging unsuccessful: {error}',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
-                    },
-                ],
-            },
-        },
-        database: {
-            url: 'environment/database',
-            title: t('admin.sidebar.database'),
-            title_default: 'Database',
-            searchableStrings: [
-                'admin.database.title',
-                ['admin.recycle.recycleDescription', {featureName: '', reloadConfiguration: ''}],
-                'admin.recycle.recycleDescription.featureName',
-                'admin.recycle.recycleDescription.reloadConfiguration',
-                'admin.recycle.button',
-                'admin.sql.noteDescription',
-                'admin.sql.disableDatabaseSearchTitle',
-                'admin.sql.disableDatabaseSearchDescription',
-                'admin.sql.driverName',
-                'admin.sql.driverNameDescription',
-                'admin.sql.dataSource',
-                'admin.sql.dataSourceDescription',
-                'admin.sql.maxConnectionsTitle',
-                'admin.sql.maxConnectionsDescription',
-                'admin.sql.maxOpenTitle',
-                'admin.sql.maxOpenDescription',
-                'admin.sql.queryTimeoutTitle',
-                'admin.sql.queryTimeoutDescription',
-                'admin.sql.connMaxLifetimeTitle',
-                'admin.sql.connMaxLifetimeDescription',
-                'admin.sql.connMaxIdleTimeTitle',
-                'admin.sql.connMaxIdleTimeDescription',
-                'admin.sql.traceTitle',
-                'admin.sql.traceDescription',
-            ],
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DATABASE)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DATABASE)),
-            schema: {
-                id: 'DatabaseSettings',
-                component: DatabaseSettings,
-            },
-        },
-        elasticsearch: {
-            url: 'environment/elasticsearch',
-            title: t('admin.sidebar.elasticsearch'),
-            title_default: 'Elasticsearch',
-            isHidden: it.any(
-                it.not(it.licensedForFeature('Elasticsearch')),
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.ELASTICSEARCH)),
-            ),
-            searchableStrings: [
-                'admin.elasticsearch.title',
-                'admin.elasticsearch.enableIndexingTitle',
-                ['admin.elasticsearch.enableIndexingDescription', {documentationLink: ''}],
-                'admin.elasticsearch.enableIndexingDescription.documentationLinkText',
-                'admin.elasticsearch.connectionUrlTitle',
-                ['admin.elasticsearch.connectionUrlDescription', {documentationLink: ''}],
-                'admin.elasticsearch.connectionUrlExample.documentationLinkText',
-                'admin.elasticsearch.skipTLSVerificationTitle',
-                'admin.elasticsearch.skipTLSVerificationDescription',
-                'admin.elasticsearch.usernameTitle',
-                'admin.elasticsearch.usernameDescription',
-                'admin.elasticsearch.passwordTitle',
-                'admin.elasticsearch.passwordDescription',
-                'admin.elasticsearch.sniffTitle',
-                'admin.elasticsearch.sniffDescription',
-                'admin.elasticsearch.testHelpText',
-                'admin.elasticsearch.elasticsearch_test_button',
-                'admin.elasticsearch.bulkIndexingTitle',
-                'admin.elasticsearch.createJob.help',
-                'admin.elasticsearch.purgeIndexesHelpText',
-                'admin.elasticsearch.purgeIndexesButton',
-                'admin.elasticsearch.purgeIndexesButton.label',
-                'admin.elasticsearch.enableSearchingTitle',
-                'admin.elasticsearch.enableSearchingDescription',
-            ],
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.ELASTICSEARCH)),
-            schema: {
-                id: 'ElasticSearchSettings',
-                component: ElasticSearchSettings,
-            },
-        },
-        storage: {
-            url: 'environment/file_storage',
-            title: t('admin.sidebar.fileStorage'),
-            title_default: 'File Storage',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-            ),
-            schema: {
-                id: 'FileSettings',
-                name: t('admin.environment.fileStorage'),
-                name_default: 'File Storage',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'FileSettings.DriverName',
-                        label: t('admin.image.storeTitle'),
-                        label_default: 'File Storage System:',
-                        help_text: t('admin.image.storeDescription'),
-                        help_text_default: 'Storage system where files and image attachments are saved.\n \nSelecting "Amazon S3" enables fields to enter your Amazon credentials and bucket details.\n \nSelecting "Local File System" enables the field to specify a local file directory.',
-                        help_text_markdown: true,
-                        options: [
-                            {
-                                value: FILE_STORAGE_DRIVER_LOCAL,
-                                display_name: t('admin.image.storeLocal'),
-                                display_name_default: 'Local File System',
-                            },
-                            {
-                                value: FILE_STORAGE_DRIVER_S3,
-                                display_name: t('admin.image.storeAmazonS3'),
-                                display_name_default: 'Amazon S3',
-                            },
-                        ],
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.Directory',
-                        label: t('admin.image.localTitle'),
-                        label_default: 'Local Storage Directory:',
-                        help_text: t('admin.image.localDescription'),
-                        help_text_default: 'Directory to which files and images are written. If blank, defaults to ./data/.',
-                        placeholder: t('admin.image.localExample'),
-                        placeholder_default: 'E.g.: "./data/"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_LOCAL)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'FileSettings.MaxFileSize',
-                        label: t('admin.image.maxFileSizeTitle'),
-                        label_default: 'Maximum File Size:',
-                        help_text: t('admin.image.maxFileSizeDescription'),
-                        help_text_default: 'Maximum file size for message attachments in megabytes. Caution: Verify server memory can support your setting choice. Large file sizes increase the risk of server crashes and failed uploads due to network interruptions.',
-                        placeholder: t('admin.image.maxFileSizeExample'),
-                        placeholder_default: '50',
-                        onConfigLoad: (configVal) => configVal / MEBIBYTE,
-                        onConfigSave: (displayVal) => displayVal * MEBIBYTE,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'FileSettings.ExtractContent',
-                        label: t('admin.image.extractContentTitle'),
-                        label_default: 'Enable document search by content:',
-                        help_text: t('admin.image.extractContentDescription'),
-                        help_text_markdown: false,
-                        help_text_default: 'When enabled, supported document types are searchable by their content. Search results for existing documents may be incomplete <link>until a data migration is executed</link>.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://www.mattermost.com/file-content-extraction'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'FileSettings.ArchiveRecursion',
-                        label: t('admin.image.archiveRecursionTitle'),
-                        label_default: 'Enable searching content of documents within ZIP files:',
-                        help_text: t('admin.image.archiveRecursionDescription'),
-                        help_text_default: 'When enabled, content of documents within ZIP files will be returned in search results. This may have an impact on server performance for large files. ',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.configIsFalse('FileSettings', 'ExtractContent'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.AmazonS3Bucket',
-                        label: t('admin.image.amazonS3BucketTitle'),
-                        label_default: 'Amazon S3 Bucket:',
-                        help_text: t('admin.image.amazonS3BucketDescription'),
-                        help_text_default: 'Name you selected for your S3 bucket in AWS.',
-                        placeholder: t('admin.image.amazonS3BucketExample'),
-                        placeholder_default: 'E.g.: "mattermost-media"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.AmazonS3PathPrefix',
-                        label: t('admin.image.amazonS3PathPrefixTitle'),
-                        label_default: 'Amazon S3 Path Prefix:',
-                        help_text: t('admin.image.amazonS3PathPrefixDescription'),
-                        help_text_default: 'Prefix you selected for your S3 bucket in AWS.',
-                        placeholder: t('admin.image.amazonS3PathPrefixExample'),
-                        placeholder_default: 'E.g.: "subdir1/" or you can leave it .',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.AmazonS3Region',
-                        label: t('admin.image.amazonS3RegionTitle'),
-                        label_default: 'Amazon S3 Region:',
-                        help_text: t('admin.image.amazonS3RegionDescription'),
-                        help_text_default: 'AWS region you selected when creating your S3 bucket. If no region is set, Mattermost attempts to get the appropriate region from AWS, or sets it to "us-east-1" if none found.',
-                        placeholder: t('admin.image.amazonS3RegionExample'),
-                        placeholder_default: 'E.g.: "us-east-1"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.AmazonS3AccessKeyId',
-                        label: t('admin.image.amazonS3IdTitle'),
-                        label_default: 'Amazon S3 Access Key ID:',
-                        help_text: t('admin.image.amazonS3IdDescription'),
-                        help_text_default: '(Optional) Only required if you do not want to authenticate to S3 using an <link>IAM role</link>. Enter the Access Key ID provided by your Amazon EC2 administrator.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        placeholder: t('admin.image.amazonS3IdExample'),
-                        placeholder_default: 'E.g.: "AKIADTOVBGERKLCBV"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.AmazonS3Endpoint',
-                        label: t('admin.image.amazonS3EndpointTitle'),
-                        label_default: 'Amazon S3 Endpoint:',
-                        help_text: t('admin.image.amazonS3EndpointDescription'),
-                        help_text_default: 'Hostname of your S3 Compatible Storage provider. Defaults to "s3.amazonaws.com".',
-                        placeholder: t('admin.image.amazonS3EndpointExample'),
-                        placeholder_default: 'E.g.: "s3.amazonaws.com"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'FileSettings.AmazonS3SecretAccessKey',
-                        label: t('admin.image.amazonS3SecretTitle'),
-                        label_default: 'Amazon S3 Secret Access Key:',
-                        help_text: t('admin.image.amazonS3SecretDescription'),
-                        help_text_default: '(Optional) The secret access key associated with your Amazon S3 Access Key ID.',
-                        placeholder: t('admin.image.amazonS3SecretExample'),
-                        placeholder_default: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'FileSettings.AmazonS3SSL',
-                        label: t('admin.image.amazonS3SSLTitle'),
-                        label_default: 'Enable Secure Amazon S3 Connections:',
-                        help_text: t('admin.image.amazonS3SSLDescription'),
-                        help_text_default: 'When false, allow insecure connections to Amazon S3. Defaults to secure connections only.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'FileSettings.AmazonS3SSE',
-                        label: t('admin.image.amazonS3SSETitle'),
-                        label_default: 'Enable Server-Side Encryption for Amazon S3:',
-                        help_text: t('admin.image.amazonS3SSEDescription'),
-                        help_text_default: 'When true, encrypt files in Amazon S3 using server-side encryption with Amazon S3-managed keys. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/configure/configuration-settings.html#session-lengths'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('Compliance')),
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'FileSettings.AmazonS3Trace',
-                        label: t('admin.image.amazonS3TraceTitle'),
-                        label_default: 'Enable Amazon S3 Debugging:',
-                        help_text: t('admin.image.amazonS3TraceDescription'),
-                        help_text_default: '(Development Mode) When true, log additional debugging information to the system logs.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                            it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BUTTON,
-                        action: testS3Connection,
-                        key: 'TestS3Connection',
-                        label: t('admin.s3.connectionS3Test'),
-                        label_default: 'Test Connection',
-                        loading: t('admin.s3.testing'),
-                        loading_default: 'Testing...',
-                        error_message: t('admin.s3.s3Fail'),
-                        error_message_default: 'Connection unsuccessful: {error}',
-                        success_message: t('admin.s3.s3Success'),
-                        success_message_default: 'Connection was successful',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
-                    },
-                ],
-            },
-        },
-        image_proxy: {
-            url: 'environment/image_proxy',
-            title: t('admin.sidebar.imageProxy'),
-            title_default: 'Image Proxy',
-            isHidden: it.any(
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-            ),
-            schema: {
-                id: 'ImageProxy',
-                name: t('admin.environment.imageProxy'),
-                name_default: 'Image Proxy',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ImageProxySettings.Enable',
-                        label: t('admin.image.enableProxy'),
-                        label_default: 'Enable Image Proxy:',
-                        help_text: t('admin.image.enableProxyDescription'),
-                        help_text_default: 'When true, enables an image proxy for loading all Markdown images.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'ImageProxySettings.ImageProxyType',
-                        label: t('admin.image.proxyType'),
-                        label_default: 'Image Proxy Type:',
-                        help_text: t('admin.image.proxyTypeDescription'),
-                        help_text_default: 'Configure an image proxy to load all Markdown images through a proxy. The image proxy prevents users from making insecure image requests, provides caching for increased performance, and automates image adjustments such as resizing. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/deploy/image-proxy.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        options: [
-                            {
-                                value: 'atmos/camo',
-                                display_name: t('atmos/camo'),
-                                display_name_default: 'atmos/camo',
-                            },
-                            {
-                                value: 'local',
-                                display_name: t('local'),
-                                display_name_default: 'local',
-                            },
-                        ],
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
-                            it.stateIsFalse('ImageProxySettings.Enable'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ImageProxySettings.RemoteImageProxyURL',
-                        label: t('admin.image.proxyURL'),
-                        label_default: 'Remote Image Proxy URL:',
-                        help_text: t('admin.image.proxyURLDescription'),
-                        help_text_default: 'URL of your remote image proxy server.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
-                            it.stateIsFalse('ImageProxySettings.Enable'),
-                            it.stateEquals('ImageProxySettings.ImageProxyType', 'local'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ImageProxySettings.RemoteImageProxyOptions',
-                        label: t('admin.image.proxyOptions'),
-                        label_default: 'Remote Image Proxy Options:',
-                        help_text: t('admin.image.proxyOptionsDescription'),
-                        help_text_default: 'Additional options such as the URL signing key. Refer to your image proxy documentation to learn more about what options are supported.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
-                            it.stateIsFalse('ImageProxySettings.Enable'),
-                            it.stateEquals('ImageProxySettings.ImageProxyType', 'local'),
-                        ),
-                    },
-                ],
-            },
-        },
-        smtp: {
-            url: 'environment/smtp',
-            title: t('admin.sidebar.smtp'),
-            title_default: 'SMTP',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-            ),
-            schema: {
-                id: 'SMTP',
-                name: t('admin.environment.smtp'),
-                name_default: 'SMTP',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'EmailSettings.SMTPServer',
-                        label: t('admin.environment.smtp.smtpServer.title'),
-                        label_default: 'SMTP Server:',
-                        placeholder: t('admin.environment.smtp.smtpServer.placeholder'),
-                        placeholder_default: 'Ex: "smtp.yourcompany.com", "email-smtp.us-east-1.amazonaws.com"',
-                        help_text: t('admin.environment.smtp.smtpServer.description'),
-                        help_text_default: 'Location of SMTP email server.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'EmailSettings.SMTPPort',
-                        label: t('admin.environment.smtp.smtpPort.title'),
-                        label_default: 'SMTP Server Port:',
-                        placeholder: t('admin.environment.smtp.smtpPort.placeholder'),
-                        placeholder_default: 'Ex: "25", "465", "587"',
-                        help_text: t('admin.environment.smtp.smtpPort.description'),
-                        help_text_default: 'Port of SMTP email server.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'EmailSettings.EnableSMTPAuth',
-                        label: t('admin.environment.smtp.smtpAuth.title'),
-                        label_default: 'Enable SMTP Authentication:',
-                        help_text: t('admin.environment.smtp.smtpAuth.description'),
-                        help_text_default: 'When true, SMTP Authentication is enabled.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'EmailSettings.SMTPUsername',
-                        label: t('admin.environment.smtp.smtpUsername.title'),
-                        label_default: 'SMTP Server Username:',
-                        placeholder: t('admin.environment.smtp.smtpUsername.placeholder'),
-                        placeholder_default: 'Ex: "admin@yourcompany.com", "AKIADTOVBGERKLCBV"',
-                        help_text: t('admin.environment.smtp.smtpUsername.description'),
-                        help_text_default: 'Obtain this credential from administrator setting up your email server.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                            it.stateIsFalse('EmailSettings.EnableSMTPAuth'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'EmailSettings.SMTPPassword',
-                        label: t('admin.environment.smtp.smtpPassword.title'),
-                        label_default: 'SMTP Server Password:',
-                        placeholder: t('admin.environment.smtp.smtpPassword.placeholder'),
-                        placeholder_default: 'Ex: "yourpassword", "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"',
-                        help_text: t('admin.environment.smtp.smtpPassword.description'),
-                        help_text_default: 'Obtain this credential from administrator setting up your email server.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                            it.stateIsFalse('EmailSettings.EnableSMTPAuth'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'EmailSettings.ConnectionSecurity',
-                        label: t('admin.environment.smtp.connectionSecurity.title'),
-                        label_default: 'Connection Security:',
-                        help_text: DefinitionConstants.CONNECTION_SECURITY_HELP_TEXT_EMAIL,
-                        options: [
-                            {
-                                value: '',
-                                display_name: t('admin.environment.smtp.connectionSecurity.option.none'),
-                                display_name_default: 'None',
-                            },
-                            {
-                                value: 'TLS',
-                                display_name: t('admin.environment.smtp.connectionSecurity.option.tls'),
-                                display_name_default: 'TLS (Recommended)',
-                            },
-                            {
-                                value: 'STARTTLS',
-                                display_name: t('admin.environment.smtp.connectionSecurity.option.starttls'),
-                                display_name_default: 'STARTTLS',
-                            },
-                        ],
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BUTTON,
-                        action: testSmtp,
-                        key: 'TestSmtpConnection',
-                        label: t('admin.environment.smtp.connectionSmtpTest'),
-                        label_default: 'Test Connection',
-                        loading: t('admin.environment.smtp.testing'),
-                        loading_default: 'Testing...',
-                        error_message: t('admin.environment.smtp.smtpFail'),
-                        error_message_default: 'Connection unsuccessful: {error}',
-                        success_message: t('admin.environment.smtp.smtpSuccess'),
-                        success_message_default: 'No errors were reported while sending an email. Please check your inbox to make sure.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'EmailSettings.SkipServerCertificateVerification',
-                        label: t('admin.environment.smtp.skipServerCertificateVerification.title'),
-                        label_default: 'Skip Server Certificate Verification:',
-                        help_text: t('admin.environment.smtp.skipServerCertificateVerification.description'),
-                        help_text_default: 'When true, Mattermost will not verify the email server certificate.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableSecurityFixAlert',
-                        label: t('admin.environment.smtp.enableSecurityFixAlert.title'),
-                        label_default: 'Enable Security Alerts:',
-                        help_text: t('admin.environment.smtp.enableSecurityFixAlert.description'),
-                        help_text_default: 'When true, System Administrators are notified by email if a relevant security fix alert has been announced in the last 12 hours. Requires email to be enabled.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
-                    },
-                ],
-            },
-        },
-        push_notification_server: {
-            url: 'environment/push_notification_server',
-            title: t('admin.sidebar.pushNotificationServer'),
-            title_default: 'Push Notification Server',
-            searchableStrings: [
-                'admin.environment.pushNotificationServer',
-                'admin.email.pushTitle',
-                'admin.email.pushServerTitle',
-                'admin.email.pushContentTitle',
-                'admin.email.pushContentDesc',
-            ],
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PUSH_NOTIFICATION_SERVER)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PUSH_NOTIFICATION_SERVER)),
-            schema: {
-                id: 'PushNotificationsSettings',
-                component: PushNotificationsSettings,
-            },
-        },
-        high_availability: {
-            url: 'environment/high_availability',
-            title: t('admin.sidebar.highAvailability'),
-            title_default: 'High Availability',
-            isHidden: it.any(
-                it.not(it.licensedForFeature('Cluster')),
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
-            ),
-            searchableStrings: [
-                'admin.advance.cluster',
-                'admin.cluster.noteDescription',
-                'admin.cluster.enableTitle',
-                'admin.cluster.enableDescription',
-                'admin.cluster.ClusterName',
-                'admin.cluster.ClusterNameDesc',
-                'admin.cluster.OverrideHostname',
-                'admin.cluster.OverrideHostnameDesc',
-                'admin.cluster.UseIPAddress',
-                'admin.cluster.UseIPAddressDesc',
-                'admin.cluster.EnableExperimentalGossipEncryption',
-                'admin.cluster.EnableExperimentalGossipEncryptionDesc',
-                'admin.cluster.EnableGossipCompression',
-                'admin.cluster.EnableGossipCompressionDesc',
-                'admin.cluster.GossipPort',
-                'admin.cluster.GossipPortDesc',
-                'admin.cluster.StreamingPort',
-                'admin.cluster.StreamingPortDesc',
-            ],
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
-            schema: {
-                id: 'ClusterSettings',
-                component: ClusterSettings,
-            },
-        },
-        rate_limiting: {
-            url: 'environment/rate_limiting',
-            title: t('admin.sidebar.rateLimiting'),
-            title_default: 'Rate Limiting',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-            ),
-            schema: {
-                id: 'ServiceSettings',
-                name: t('admin.rate.title'),
-                name_default: 'Rate Limiting',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BANNER,
-                        label: t('admin.rate.noteDescription'),
-                        label_default: 'Changing properties other than Site URL in this section will require a server restart before taking effect.',
-                        banner_type: 'info',
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'RateLimitSettings.Enable',
-                        label: t('admin.rate.enableLimiterTitle'),
-                        label_default: 'Enable Rate Limiting:',
-                        help_text: t('admin.rate.enableLimiterDescription'),
-                        help_text_default: 'When true, APIs are throttled at rates specified below.\n \nRate limiting prevents server overload from too many requests. This is useful to prevent third-party applications or malicous attacks from impacting your server.',
-                        help_text_markdown: true,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'RateLimitSettings.PerSec',
-                        label: t('admin.rate.queriesTitle'),
-                        label_default: 'Maximum Queries per Second:',
-                        placeholder: t('admin.rate.queriesExample'),
-                        placeholder_default: 'E.g.: "10"',
-                        help_text: t('admin.rate.queriesDescription'),
-                        help_text_default: 'Throttles API at this number of requests per second.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                            it.stateEquals('RateLimitSettings.Enable', false),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'RateLimitSettings.MaxBurst',
-                        label: t('admin.rate.maxBurst'),
-                        label_default: 'Maximum Burst Size:',
-                        placeholder: t('admin.rate.maxBurstExample'),
-                        placeholder_default: 'E.g.: "100"',
-                        help_text: t('admin.rate.maxBurstDescription'),
-                        help_text_default: 'Maximum number of requests allowed beyond the per second query limit.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                            it.stateEquals('RateLimitSettings.Enable', false),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'RateLimitSettings.MemoryStoreSize',
-                        label: t('admin.rate.memoryTitle'),
-                        label_default: 'Memory Store Size:',
-                        placeholder: t('admin.rate.memoryExample'),
-                        placeholder_default: 'E.g.: "10000"',
-                        help_text: t('admin.rate.memoryDescription'),
-                        help_text_default: 'Maximum number of users sessions connected to the system as determined by "Vary rate limit by remote address" and "Vary rate limit by HTTP header".',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                            it.stateEquals('RateLimitSettings.Enable', false),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'RateLimitSettings.VaryByRemoteAddr',
-                        label: t('admin.rate.remoteTitle'),
-                        label_default: 'Vary rate limit by remote address:',
-                        help_text: t('admin.rate.remoteDescription'),
-                        help_text_default: 'When true, rate limit API access by IP address.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                            it.stateEquals('RateLimitSettings.Enable', false),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'RateLimitSettings.VaryByUser',
-                        label: t('admin.rate.varyByUser'),
-                        label_default: 'Vary rate limit by user:',
-                        help_text: t('admin.rate.varyByUserDescription'),
-                        help_text_default: 'When true, rate limit API access by user athentication token.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                            it.stateEquals('RateLimitSettings.Enable', false),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'RateLimitSettings.VaryByHeader',
-                        label: t('admin.rate.httpHeaderTitle'),
-                        label_default: 'Vary rate limit by HTTP header:',
-                        placeholder: t('admin.rate.httpHeaderExample'),
-                        placeholder_default: 'E.g.: "X-Real-IP", "X-Forwarded-For"',
-                        help_text: t('admin.rate.httpHeaderDescription'),
-                        help_text_default: 'When filled in, vary rate limiting by HTTP header field specified (e.g. when configuring NGINX set to "X-Real-IP", when configuring AmazonELB set to "X-Forwarded-For").',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
-                            it.stateEquals('RateLimitSettings.Enable', false),
-                            it.stateEquals('RateLimitSettings.VaryByRemoteAddr', true),
-                        ),
-                    },
-                ],
-            },
-        },
-        logging: {
-            url: 'environment/logging',
-            title: t('admin.sidebar.logging'),
-            title_default: 'Logging',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-            ),
-            schema: {
-                id: 'LogSettings',
-                name: t('admin.general.log'),
-                name_default: 'Logging',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'LogSettings.EnableConsole',
-                        label: t('admin.log.consoleTitle'),
-                        label_default: 'Output logs to console: ',
-                        help_text: t('admin.log.consoleDescription'),
-                        help_text_default: 'Typically set to false in production. Developers may set this field to true to output log messages to console based on the console level option.  If true, server writes messages to the standard output stream (stdout). Changing this setting requires a server restart before taking effect.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'LogSettings.ConsoleLevel',
-                        label: t('admin.log.levelTitle'),
-                        label_default: 'Console Log Level:',
-                        help_text: t('admin.log.levelDescription'),
-                        help_text_default: 'This setting determines the level of detail at which log events are written to the console. ERROR: Outputs only error messages. INFO: Outputs error messages and information around startup and initialization. DEBUG: Prints high detail for developers working on debugging issues.',
-                        options: DefinitionConstants.LOG_LEVEL_OPTIONS,
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                            it.stateIsFalse('LogSettings.EnableConsole'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'LogSettings.ConsoleJson',
-                        label: t('admin.log.consoleJsonTitle'),
-                        label_default: 'Output console logs as JSON:',
-                        help_text: t('admin.log.jsonDescription'),
-                        help_text_default: 'When true, logged events are written in a machine readable JSON format. Otherwise they are printed as plain text. Changing this setting requires a server restart before taking effect.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                            it.stateIsFalse('LogSettings.EnableConsole'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'LogSettings.EnableFile',
-                        label: t('admin.log.fileTitle'),
-                        label_default: 'Output logs to file: ',
-                        help_text: t('admin.log.fileDescription'),
-                        help_text_default: 'Typically set to true in production. When true, logged events are written to the mattermost.log file in the directory specified in the File Log Directory field. The logs are rotated at 100 MB and archived to a file in the same directory, and given a name with a datestamp and serial number. For example, mattermost.2017-03-31.001. Changing this setting requires a server restart before taking effect.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'LogSettings.FileLevel',
-                        label: t('admin.log.fileLevelTitle'),
-                        label_default: 'File Log Level:',
-                        help_text: t('admin.log.fileLevelDescription'),
-                        help_text_default: 'This setting determines the level of detail at which log events are written to the log file. ERROR: Outputs only error messages. INFO: Outputs error messages and information around startup and initialization. DEBUG: Prints high detail for developers working on debugging issues.',
-                        options: DefinitionConstants.LOG_LEVEL_OPTIONS,
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                            it.stateIsFalse('LogSettings.EnableFile'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'LogSettings.FileJson',
-                        label: t('admin.log.fileJsonTitle'),
-                        label_default: 'Output file logs as JSON:',
-                        help_text: t('admin.log.jsonDescription'),
-                        help_text_default: 'When true, logged events are written in a machine readable JSON format. Otherwise they are printed as plain text. Changing this setting requires a server restart before taking effect.',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                            it.stateIsFalse('LogSettings.EnableFile'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'LogSettings.FileLocation',
-                        label: t('admin.log.locationTitle'),
-                        label_default: 'File Log Directory:',
-                        help_text: t('admin.log.locationDescription'),
-                        help_text_default: 'The location of the log files. If blank, they are stored in the ./logs directory. The path that you set must exist and Mattermost must have write permissions in it. Changing this setting requires a server restart before taking effect.',
-                        placeholder: t('admin.log.locationPlaceholder'),
-                        placeholder_default: 'Enter your file location',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                            it.stateIsFalse('LogSettings.EnableFile'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'LogSettings.EnableWebhookDebugging',
-                        label: t('admin.log.enableWebhookDebugging'),
-                        label_default: 'Enable Webhook Debugging:',
-                        help_text: t('admin.log.enableWebhookDebuggingDescription'),
-                        help_text_default: 'When true, sends webhook debug messages to the server logs. To also output the request body of incoming webhooks, set {boldedLogLevel} to "DEBUG".',
-                        help_text_values: {
-                            boldedLogLevel: (
-                                <strong>
-                                    <FormattedMessage
-                                        id='admin.log.logLevel'
-                                        defaultMessage='Log Level'
-                                    />
-                                </strong>
-                            ),
-                        },
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'LogSettings.EnableDiagnostics',
-                        label: t('admin.log.enableDiagnostics'),
-                        label_default: 'Enable Diagnostics and Error Reporting:',
-                        help_text: t('admin.log.enableDiagnosticsDescription'),
-                        help_text_default: 'Enable this feature to improve the quality and performance of Mattermost by sending error reporting and diagnostic information to Mattermost, Inc. Read our <link>privacy policy</link> to learn more.',
-                        help_text_markdown: false,
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://mattermost.com/privacy-policy/'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        onConfigSave: (displayVal, previousVal) => {
-                            if (previousVal && previousVal !== displayVal) {
-                                trackEvent('ui', 'diagnostics_disabled');
-                            }
-                            return displayVal;
-                        },
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
-                    },
-                ],
-            },
-        },
-        session_lengths: {
-            url: 'environment/session_lengths',
-            title: t('admin.sidebar.sessionLengths'),
-            title_default: 'Session Lengths',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SESSION_LENGTHS)),
-            ),
-            searchableStrings: [
-                'admin.sessionLengths.title',
-                'admin.service.webSessionHoursDesc.extendLength',
-                'admin.service.mobileSessionHoursDesc.extendLength',
-                'admin.service.ssoSessionHoursDesc.extendLength',
-                'admin.service.webSessionHoursDesc',
-                'admin.service.mobileSessionHoursDesc',
-                'admin.service.ssoSessionHoursDesc',
-                'admin.service.sessionIdleTimeout',
-                'admin.service.sessionIdleTimeoutDesc',
-                'admin.service.extendSessionLengthActivity.label',
-                'admin.service.extendSessionLengthActivity.helpText',
-                'admin.service.webSessionHours',
-                'admin.service.sessionHoursEx',
-                'admin.service.mobileSessionHours',
-                'admin.service.ssoSessionHours',
-                'admin.service.sessionCache',
-                'admin.service.sessionCacheDesc',
-            ],
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SESSION_LENGTHS)),
-            schema: {
-                id: 'SessionLengths',
-                component: SessionLengthSettings,
-            },
-        },
-        metrics: {
-            url: 'environment/performance_monitoring',
-            title: t('admin.sidebar.metrics'),
-            title_default: 'Performance Monitoring',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
-            ),
-            schema: {
-                id: 'MetricsSettings',
-                name: t('admin.advance.metrics'),
-                name_default: 'Performance Monitoring',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'MetricsSettings.Enable',
-                        label: t('admin.metrics.enableTitle'),
-                        label_default: 'Enable Performance Monitoring:',
-                        help_text: t('admin.metrics.enableDescription'),
-                        help_text_default: 'When true, Mattermost will enable performance monitoring collection and profiling. Please see <link>documentation</link> to learn more about configuring performance monitoring for Mattermost.',
-                        help_text_markdown: false,
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/deployment/metrics.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'MetricsSettings.ListenAddress',
-                        label: t('admin.metrics.listenAddressTitle'),
-                        label_default: 'Listen Address:',
-                        placeholder: t('admin.metrics.listenAddressEx'),
-                        placeholder_default: 'E.g.: ":8067"',
-                        help_text: t('admin.metrics.listenAddressDesc'),
-                        help_text_default: 'The address the server will listen on to expose performance metrics.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
-                    },
-                ],
-            },
-        },
-        developer: {
-            url: 'environment/developer',
-            title: t('admin.sidebar.developer'),
-            title_default: 'Developer',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
-            ),
-            schema: {
-                id: 'ServiceSettings',
-                name: t('admin.developer.title'),
-                name_default: 'Developer Settings',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableTesting',
-                        label: t('admin.service.testingTitle'),
-                        label_default: 'Enable Testing Commands:',
-                        help_text: t('admin.service.testingDescription'),
-                        help_text_default: 'When true, /test slash command is enabled to load test accounts, data and text formatting. Changing this requires a server restart before taking effect.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableDeveloper',
-                        label: t('admin.service.developerTitle'),
-                        label_default: 'Enable Developer Mode: ',
-                        help_text: t('admin.service.developerDesc'),
-                        help_text_default: 'When true, JavaScript errors are shown in a purple bar at the top of the user interface. Not recommended for use in production.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableClientPerformanceDebugging',
-                        label: t('admin.service.performanceDebuggingTitle'),
-                        label_default: 'Enable Client Performance Debugging: ',
-                        help_text: t('admin.service.performanceDebuggingDescription'),
-                        help_text_default: 'When true, users can access debugging settings for their account in **Settings > Advanced > Performance Debugging** to assist in diagnosing performance issues.',
-                        help_text_markdown: true,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.AllowedUntrustedInternalConnections',
-                        label: t('admin.service.internalConnectionsTitle'),
-                        label_default: 'Allow untrusted internal connections to: ',
-                        placeholder: t('admin.service.internalConnectionsEx'),
-                        placeholder_default: 'webhooks.internal.example.com 127.0.0.1 10.0.16.0/28',
-                        help_text: t('admin.service.internalConnectionsDesc'),
-                        help_text_default: 'A whitelist of local network addresses that can be requested by the Mattermost server on behalf of a client. Care should be used when configuring this setting to prevent unintended access to your local network. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://mattermost.com/pl/default-allow-untrusted-internal-connections'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
-                    },
-                ],
-            },
-        },
-    },
+    // environment: {
+    //     icon: (
+    //         <ServerVariantIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.environment'),
+    //     sectionTitleDefault: 'Environment',
+    //     isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.ENVIRONMENT)),
+    //     web_server: {
+    //         url: 'environment/web_server',
+    //         title: t('admin.sidebar.webServer'),
+    //         title_default: 'Web Server',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //         ),
+    //         schema: {
+    //             id: 'ServiceSettings',
+    //             name: t('admin.environment.webServer'),
+    //             name_default: 'Web Server',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BANNER,
+    //                     label: t('admin.rate.noteDescription'),
+    //                     label_default: 'Changing properties in this section will require a server restart before taking effect.',
+    //                     banner_type: 'info',
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.SiteURL',
+    //                     label: t('admin.service.siteURL'),
+    //                     label_default: 'Site URL:',
+    //                     help_text: t('admin.service.siteURLDescription'),
+    //                     help_text_default: 'The URL that users will use to access Mattermost. Standard ports, such as 80 and 443, can be omitted, but non-standard ports are required. For example: http://example.com:8065. This setting is required.\n \nMattermost may be hosted at a subpath. For example: http://example.com:8065/company/mattermost. A restart is required before the server will work correctly.',
+    //                     help_text_markdown: true,
+    //                     placeholder: t('admin.service.siteURLExample'),
+    //                     placeholder_default: 'E.g.: "http://example.com:8065"',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BUTTON,
+    //                     key: 'TestSiteURL',
+    //                     action: testSiteURL,
+    //                     label: t('admin.service.testSiteURL'),
+    //                     label_default: 'Test Live URL',
+    //                     loading: t('admin.service.testSiteURLTesting'),
+    //                     loading_default: 'Testing...',
+    //                     error_message: t('admin.service.testSiteURLFail'),
+    //                     error_message_default: 'Test unsuccessful: {error}',
+    //                     success_message: t('admin.service.testSiteURLSuccess'),
+    //                     success_message_default: 'Test successful. This is a valid URL.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.ListenAddress',
+    //                     label: t('admin.service.listenAddress'),
+    //                     label_default: 'Listen Address:',
+    //                     placeholder: t('admin.service.listenExample'),
+    //                     placeholder_default: 'E.g.: ":8065"',
+    //                     help_text: t('admin.service.listenDescription'),
+    //                     help_text_default: 'The address and port to which to bind and listen. Specifying ":8065" will bind to all network interfaces. Specifying "127.0.0.1:8065" will only bind to the network interface having that IP address. If you choose a port of a lower level (called "system ports" or "well-known ports", in the range of 0-1023), you must have permissions to bind to that port. On Linux you can use: "sudo setcap cap_net_bind_service=+ep ./bin/mattermost" to allow Mattermost to bind to well-known ports.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.Forward80To443',
+    //                     label: t('admin.service.forward80To443'),
+    //                     label_default: 'Forward port 80 to 443:',
+    //                     help_text: t('admin.service.forward80To443Description'),
+    //                     help_text_default: 'Forwards all insecure traffic from port 80 to secure port 443. Not recommended when using a proxy server.',
+    //                     disabled_help_text: t('admin.service.forward80To443Description.disabled'),
+    //                     disabled_help_text_default: 'Forwards all insecure traffic from port 80 to secure port 443. Not recommended when using a proxy server.\n \nThis setting cannot be enabled until your server is [listening](#ListenAddress) on port 443.',
+    //                     disabled_help_text_markdown: true,
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                         it.not(it.stateMatches('ServiceSettings.ListenAddress', /:443$/)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'ServiceSettings.ConnectionSecurity',
+    //                     label: t('admin.connectionSecurityTitle'),
+    //                     label_default: 'Connection Security:',
+    //                     help_text: DefinitionConstants.CONNECTION_SECURITY_HELP_TEXT_WEBSERVER,
+    //                     options: [
+    //                         {
+    //                             value: '',
+    //                             display_name: t('admin.connectionSecurityNone'),
+    //                             display_name_default: 'None',
+    //                         },
+    //                         {
+    //                             value: 'TLS',
+    //                             display_name: t('admin.connectionSecurityTls'),
+    //                             display_name_default: 'TLS (Recommended)',
+    //                         },
+    //                     ],
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.TLSCertFile',
+    //                     label: t('admin.service.tlsCertFile'),
+    //                     label_default: 'TLS Certificate File:',
+    //                     help_text: t('admin.service.tlsCertFileDescription'),
+    //                     help_text_default: 'The certificate file to use.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                         it.stateIsTrue('ServiceSettings.UseLetsEncrypt'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.TLSKeyFile',
+    //                     label: t('admin.service.tlsKeyFile'),
+    //                     label_default: 'TLS Key File:',
+    //                     help_text: t('admin.service.tlsKeyFileDescription'),
+    //                     help_text_default: 'The private key file to use.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                         it.stateIsTrue('ServiceSettings.UseLetsEncrypt'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.UseLetsEncrypt',
+    //                     label: t('admin.service.useLetsEncrypt'),
+    //                     label_default: 'Use Let\'s Encrypt:',
+    //                     help_text: t('admin.service.useLetsEncryptDescription'),
+    //                     help_text_default: 'Enable the automatic retrieval of certificates from Let\'s Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains.',
+    //                     disabled_help_text: t('admin.service.useLetsEncryptDescription.disabled'),
+    //                     disabled_help_text_default: 'Enable the automatic retrieval of certificates from Let\'s Encrypt. The certificate will be retrieved when a client attempts to connect from a new domain. This will work with multiple domains.\n \nThis setting cannot be enabled unless the [Forward port 80 to 443](#Forward80To443) setting is set to true.',
+    //                     disabled_help_text_markdown: true,
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                         it.stateIsFalse('ServiceSettings.Forward80To443'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.LetsEncryptCertificateCacheFile',
+    //                     label: t('admin.service.letsEncryptCertificateCacheFile'),
+    //                     label_default: 'Let\'s Encrypt Certificate Cache File:',
+    //                     help_text: t('admin.service.letsEncryptCertificateCacheFileDescription'),
+    //                     help_text_default: 'Certificates retrieved and other data about the Let\'s Encrypt service will be stored in this file.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                         it.stateIsFalse('ServiceSettings.UseLetsEncrypt'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'ServiceSettings.ReadTimeout',
+    //                     label: t('admin.service.readTimeout'),
+    //                     label_default: 'Read Timeout:',
+    //                     help_text: t('admin.service.readTimeoutDescription'),
+    //                     help_text_default: 'Maximum time allowed from when the connection is accepted to when the request body is fully read.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'ServiceSettings.WriteTimeout',
+    //                     label: t('admin.service.writeTimeout'),
+    //                     label_default: 'Write Timeout:',
+    //                     help_text: t('admin.service.writeTimeoutDescription'),
+    //                     help_text_default: 'If using HTTP (insecure), this is the maximum time allowed from the end of reading the request headers until the response is written. If using HTTPS, it is the total time from when the connection is accepted until the response is written.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'ServiceSettings.WebserverMode',
+    //                     label: t('admin.webserverModeTitle'),
+    //                     label_default: 'Webserver Mode:',
+    //                     help_text: DefinitionConstants.WEBSERVER_MODE_HELP_TEXT,
+    //                     options: [
+    //                         {
+    //                             value: 'gzip',
+    //                             display_name: t('admin.webserverModeGzip'),
+    //                             display_name_default: 'gzip',
+    //                         },
+    //                         {
+    //                             value: 'uncompressed',
+    //                             display_name: t('admin.webserverModeUncompressed'),
+    //                             display_name_default: 'Uncompressed',
+    //                         },
+    //                         {
+    //                             value: 'disabled',
+    //                             display_name: t('admin.webserverModeDisabled'),
+    //                             display_name_default: 'Disabled',
+    //                         },
+    //                     ],
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableInsecureOutgoingConnections',
+    //                     label: t('admin.service.insecureTlsTitle'),
+    //                     label_default: 'Enable Insecure Outgoing Connections: ',
+    //                     help_text: t('admin.service.insecureTlsDesc'),
+    //                     help_text_default: 'When true, any outgoing HTTPS requests will accept unverified, self-signed certificates. For example, outgoing webhooks to a server with a self-signed TLS certificate, using any domain, will be allowed. Note that this makes these connections susceptible to man-in-the-middle attacks.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.ManagedResourcePaths',
+    //                     label: t('admin.service.managedResourcePaths'),
+    //                     label_default: 'Managed Resource Paths:',
+    //                     help_text: t('admin.service.managedResourcePathsDescription'),
+    //                     help_text_default: 'A comma-separated list of paths on the Mattermost server that are managed by another service. See <link>here</link> for more information.',
+    //                     help_text_markdown: false,
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/install/desktop-managed-resources.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BUTTON,
+    //                     action: reloadConfig,
+    //                     key: 'ReloadConfigButton',
+    //                     label: t('admin.reload.button'),
+    //                     label_default: 'Reload Configuration From Disk',
+    //                     help_text: t('admin.reload.reloadDescription'),
+    //                     help_text_default: 'Deployments using multiple databases can switch from one master database to another without restarting the Mattermost server by updating "config.json" to the new desired configuration and using the {featureName} feature to load the new settings while the server is running. The administrator should then use the {recycleDatabaseConnections} feature to recycle the database connections based on the new settings.',
+    //                     help_text_values: {
+    //                         featureName: (
+    //                             <b>
+    //                                 <FormattedMessage
+    //                                     id='admin.reload.reloadDescription.featureName'
+    //                                     defaultMessage='Reload Configuration from Disk'
+    //                                 />
+    //                             </b>
+    //                         ),
+    //                         recycleDatabaseConnections: (
+    //                             <a href='../environment/database'>
+    //                                 <b>
+    //                                     <FormattedMessage
+    //                                         id='admin.reload.reloadDescription.recycleDatabaseConnections'
+    //                                         defaultMessage='Environment > Database > Recycle Database Connections'
+    //                                     />
+    //                                 </b>
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     error_message: t('admin.reload.reloadFail'),
+    //                     error_message_default: 'Reload unsuccessful: {error}',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BUTTON,
+    //                     key: 'PurgeButton',
+    //                     action: invalidateAllCaches,
+    //                     label: t('admin.purge.button'),
+    //                     label_default: 'Purge All Caches',
+    //                     help_text: t('admin.purge.purgeDescription'),
+    //                     help_text_default: 'This will purge all the in-memory caches for things like sessions, accounts, channels, etc. Deployments using High Availability will attempt to purge all the servers in the cluster.  Purging the caches may adversely impact performance.',
+    //                     error_message: t('admin.purge.purgeFail'),
+    //                     error_message_default: 'Purging unsuccessful: {error}',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.WEB_SERVER)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     database: {
+    //         url: 'environment/database',
+    //         title: t('admin.sidebar.database'),
+    //         title_default: 'Database',
+    //         searchableStrings: [
+    //             'admin.database.title',
+    //             ['admin.recycle.recycleDescription', {featureName: '', reloadConfiguration: ''}],
+    //             'admin.recycle.recycleDescription.featureName',
+    //             'admin.recycle.recycleDescription.reloadConfiguration',
+    //             'admin.recycle.button',
+    //             'admin.sql.noteDescription',
+    //             'admin.sql.disableDatabaseSearchTitle',
+    //             'admin.sql.disableDatabaseSearchDescription',
+    //             'admin.sql.driverName',
+    //             'admin.sql.driverNameDescription',
+    //             'admin.sql.dataSource',
+    //             'admin.sql.dataSourceDescription',
+    //             'admin.sql.maxConnectionsTitle',
+    //             'admin.sql.maxConnectionsDescription',
+    //             'admin.sql.maxOpenTitle',
+    //             'admin.sql.maxOpenDescription',
+    //             'admin.sql.queryTimeoutTitle',
+    //             'admin.sql.queryTimeoutDescription',
+    //             'admin.sql.connMaxLifetimeTitle',
+    //             'admin.sql.connMaxLifetimeDescription',
+    //             'admin.sql.connMaxIdleTimeTitle',
+    //             'admin.sql.connMaxIdleTimeDescription',
+    //             'admin.sql.traceTitle',
+    //             'admin.sql.traceDescription',
+    //         ],
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DATABASE)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DATABASE)),
+    //         schema: {
+    //             id: 'DatabaseSettings',
+    //             component: DatabaseSettings,
+    //         },
+    //     },
+    //     elasticsearch: {
+    //         url: 'environment/elasticsearch',
+    //         title: t('admin.sidebar.elasticsearch'),
+    //         title_default: 'Elasticsearch',
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('Elasticsearch')),
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.ELASTICSEARCH)),
+    //         ),
+    //         searchableStrings: [
+    //             'admin.elasticsearch.title',
+    //             'admin.elasticsearch.enableIndexingTitle',
+    //             ['admin.elasticsearch.enableIndexingDescription', {documentationLink: ''}],
+    //             'admin.elasticsearch.enableIndexingDescription.documentationLinkText',
+    //             'admin.elasticsearch.connectionUrlTitle',
+    //             ['admin.elasticsearch.connectionUrlDescription', {documentationLink: ''}],
+    //             'admin.elasticsearch.connectionUrlExample.documentationLinkText',
+    //             'admin.elasticsearch.skipTLSVerificationTitle',
+    //             'admin.elasticsearch.skipTLSVerificationDescription',
+    //             'admin.elasticsearch.usernameTitle',
+    //             'admin.elasticsearch.usernameDescription',
+    //             'admin.elasticsearch.passwordTitle',
+    //             'admin.elasticsearch.passwordDescription',
+    //             'admin.elasticsearch.sniffTitle',
+    //             'admin.elasticsearch.sniffDescription',
+    //             'admin.elasticsearch.testHelpText',
+    //             'admin.elasticsearch.elasticsearch_test_button',
+    //             'admin.elasticsearch.bulkIndexingTitle',
+    //             'admin.elasticsearch.createJob.help',
+    //             'admin.elasticsearch.purgeIndexesHelpText',
+    //             'admin.elasticsearch.purgeIndexesButton',
+    //             'admin.elasticsearch.purgeIndexesButton.label',
+    //             'admin.elasticsearch.enableSearchingTitle',
+    //             'admin.elasticsearch.enableSearchingDescription',
+    //         ],
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.ELASTICSEARCH)),
+    //         schema: {
+    //             id: 'ElasticSearchSettings',
+    //             component: ElasticSearchSettings,
+    //         },
+    //     },
+    //     storage: {
+    //         url: 'environment/file_storage',
+    //         title: t('admin.sidebar.fileStorage'),
+    //         title_default: 'File Storage',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //         ),
+    //         schema: {
+    //             id: 'FileSettings',
+    //             name: t('admin.environment.fileStorage'),
+    //             name_default: 'File Storage',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'FileSettings.DriverName',
+    //                     label: t('admin.image.storeTitle'),
+    //                     label_default: 'File Storage System:',
+    //                     help_text: t('admin.image.storeDescription'),
+    //                     help_text_default: 'Storage system where files and image attachments are saved.\n \nSelecting "Amazon S3" enables fields to enter your Amazon credentials and bucket details.\n \nSelecting "Local File System" enables the field to specify a local file directory.',
+    //                     help_text_markdown: true,
+    //                     options: [
+    //                         {
+    //                             value: FILE_STORAGE_DRIVER_LOCAL,
+    //                             display_name: t('admin.image.storeLocal'),
+    //                             display_name_default: 'Local File System',
+    //                         },
+    //                         {
+    //                             value: FILE_STORAGE_DRIVER_S3,
+    //                             display_name: t('admin.image.storeAmazonS3'),
+    //                             display_name_default: 'Amazon S3',
+    //                         },
+    //                     ],
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.Directory',
+    //                     label: t('admin.image.localTitle'),
+    //                     label_default: 'Local Storage Directory:',
+    //                     help_text: t('admin.image.localDescription'),
+    //                     help_text_default: 'Directory to which files and images are written. If blank, defaults to ./data/.',
+    //                     placeholder: t('admin.image.localExample'),
+    //                     placeholder_default: 'E.g.: "./data/"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_LOCAL)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'FileSettings.MaxFileSize',
+    //                     label: t('admin.image.maxFileSizeTitle'),
+    //                     label_default: 'Maximum File Size:',
+    //                     help_text: t('admin.image.maxFileSizeDescription'),
+    //                     help_text_default: 'Maximum file size for message attachments in megabytes. Caution: Verify server memory can support your setting choice. Large file sizes increase the risk of server crashes and failed uploads due to network interruptions.',
+    //                     placeholder: t('admin.image.maxFileSizeExample'),
+    //                     placeholder_default: '50',
+    //                     onConfigLoad: (configVal) => configVal / MEBIBYTE,
+    //                     onConfigSave: (displayVal) => displayVal * MEBIBYTE,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'FileSettings.ExtractContent',
+    //                     label: t('admin.image.extractContentTitle'),
+    //                     label_default: 'Enable document search by content:',
+    //                     help_text: t('admin.image.extractContentDescription'),
+    //                     help_text_markdown: false,
+    //                     help_text_default: 'When enabled, supported document types are searchable by their content. Search results for existing documents may be incomplete <link>until a data migration is executed</link>.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://www.mattermost.com/file-content-extraction'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'FileSettings.ArchiveRecursion',
+    //                     label: t('admin.image.archiveRecursionTitle'),
+    //                     label_default: 'Enable searching content of documents within ZIP files:',
+    //                     help_text: t('admin.image.archiveRecursionDescription'),
+    //                     help_text_default: 'When enabled, content of documents within ZIP files will be returned in search results. This may have an impact on server performance for large files. ',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.configIsFalse('FileSettings', 'ExtractContent'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.AmazonS3Bucket',
+    //                     label: t('admin.image.amazonS3BucketTitle'),
+    //                     label_default: 'Amazon S3 Bucket:',
+    //                     help_text: t('admin.image.amazonS3BucketDescription'),
+    //                     help_text_default: 'Name you selected for your S3 bucket in AWS.',
+    //                     placeholder: t('admin.image.amazonS3BucketExample'),
+    //                     placeholder_default: 'E.g.: "mattermost-media"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.AmazonS3PathPrefix',
+    //                     label: t('admin.image.amazonS3PathPrefixTitle'),
+    //                     label_default: 'Amazon S3 Path Prefix:',
+    //                     help_text: t('admin.image.amazonS3PathPrefixDescription'),
+    //                     help_text_default: 'Prefix you selected for your S3 bucket in AWS.',
+    //                     placeholder: t('admin.image.amazonS3PathPrefixExample'),
+    //                     placeholder_default: 'E.g.: "subdir1/" or you can leave it .',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.AmazonS3Region',
+    //                     label: t('admin.image.amazonS3RegionTitle'),
+    //                     label_default: 'Amazon S3 Region:',
+    //                     help_text: t('admin.image.amazonS3RegionDescription'),
+    //                     help_text_default: 'AWS region you selected when creating your S3 bucket. If no region is set, Mattermost attempts to get the appropriate region from AWS, or sets it to "us-east-1" if none found.',
+    //                     placeholder: t('admin.image.amazonS3RegionExample'),
+    //                     placeholder_default: 'E.g.: "us-east-1"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.AmazonS3AccessKeyId',
+    //                     label: t('admin.image.amazonS3IdTitle'),
+    //                     label_default: 'Amazon S3 Access Key ID:',
+    //                     help_text: t('admin.image.amazonS3IdDescription'),
+    //                     help_text_default: '(Optional) Only required if you do not want to authenticate to S3 using an <link>IAM role</link>. Enter the Access Key ID provided by your Amazon EC2 administrator.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     placeholder: t('admin.image.amazonS3IdExample'),
+    //                     placeholder_default: 'E.g.: "AKIADTOVBGERKLCBV"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.AmazonS3Endpoint',
+    //                     label: t('admin.image.amazonS3EndpointTitle'),
+    //                     label_default: 'Amazon S3 Endpoint:',
+    //                     help_text: t('admin.image.amazonS3EndpointDescription'),
+    //                     help_text_default: 'Hostname of your S3 Compatible Storage provider. Defaults to "s3.amazonaws.com".',
+    //                     placeholder: t('admin.image.amazonS3EndpointExample'),
+    //                     placeholder_default: 'E.g.: "s3.amazonaws.com"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'FileSettings.AmazonS3SecretAccessKey',
+    //                     label: t('admin.image.amazonS3SecretTitle'),
+    //                     label_default: 'Amazon S3 Secret Access Key:',
+    //                     help_text: t('admin.image.amazonS3SecretDescription'),
+    //                     help_text_default: '(Optional) The secret access key associated with your Amazon S3 Access Key ID.',
+    //                     placeholder: t('admin.image.amazonS3SecretExample'),
+    //                     placeholder_default: 'E.g.: "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'FileSettings.AmazonS3SSL',
+    //                     label: t('admin.image.amazonS3SSLTitle'),
+    //                     label_default: 'Enable Secure Amazon S3 Connections:',
+    //                     help_text: t('admin.image.amazonS3SSLDescription'),
+    //                     help_text_default: 'When false, allow insecure connections to Amazon S3. Defaults to secure connections only.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'FileSettings.AmazonS3SSE',
+    //                     label: t('admin.image.amazonS3SSETitle'),
+    //                     label_default: 'Enable Server-Side Encryption for Amazon S3:',
+    //                     help_text: t('admin.image.amazonS3SSEDescription'),
+    //                     help_text_default: 'When true, encrypt files in Amazon S3 using server-side encryption with Amazon S3-managed keys. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/configure/configuration-settings.html#session-lengths'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('Compliance')),
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'FileSettings.AmazonS3Trace',
+    //                     label: t('admin.image.amazonS3TraceTitle'),
+    //                     label_default: 'Enable Amazon S3 Debugging:',
+    //                     help_text: t('admin.image.amazonS3TraceDescription'),
+    //                     help_text_default: '(Development Mode) When true, log additional debugging information to the system logs.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                         it.not(it.stateEquals('FileSettings.DriverName', FILE_STORAGE_DRIVER_S3)),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BUTTON,
+    //                     action: testS3Connection,
+    //                     key: 'TestS3Connection',
+    //                     label: t('admin.s3.connectionS3Test'),
+    //                     label_default: 'Test Connection',
+    //                     loading: t('admin.s3.testing'),
+    //                     loading_default: 'Testing...',
+    //                     error_message: t('admin.s3.s3Fail'),
+    //                     error_message_default: 'Connection unsuccessful: {error}',
+    //                     success_message: t('admin.s3.s3Success'),
+    //                     success_message_default: 'Connection was successful',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.FILE_STORAGE)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     image_proxy: {
+    //         url: 'environment/image_proxy',
+    //         title: t('admin.sidebar.imageProxy'),
+    //         title_default: 'Image Proxy',
+    //         isHidden: it.any(
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //         ),
+    //         schema: {
+    //             id: 'ImageProxy',
+    //             name: t('admin.environment.imageProxy'),
+    //             name_default: 'Image Proxy',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ImageProxySettings.Enable',
+    //                     label: t('admin.image.enableProxy'),
+    //                     label_default: 'Enable Image Proxy:',
+    //                     help_text: t('admin.image.enableProxyDescription'),
+    //                     help_text_default: 'When true, enables an image proxy for loading all Markdown images.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'ImageProxySettings.ImageProxyType',
+    //                     label: t('admin.image.proxyType'),
+    //                     label_default: 'Image Proxy Type:',
+    //                     help_text: t('admin.image.proxyTypeDescription'),
+    //                     help_text_default: 'Configure an image proxy to load all Markdown images through a proxy. The image proxy prevents users from making insecure image requests, provides caching for increased performance, and automates image adjustments such as resizing. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/deploy/image-proxy.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     options: [
+    //                         {
+    //                             value: 'atmos/camo',
+    //                             display_name: t('atmos/camo'),
+    //                             display_name_default: 'atmos/camo',
+    //                         },
+    //                         {
+    //                             value: 'local',
+    //                             display_name: t('local'),
+    //                             display_name_default: 'local',
+    //                         },
+    //                     ],
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
+    //                         it.stateIsFalse('ImageProxySettings.Enable'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ImageProxySettings.RemoteImageProxyURL',
+    //                     label: t('admin.image.proxyURL'),
+    //                     label_default: 'Remote Image Proxy URL:',
+    //                     help_text: t('admin.image.proxyURLDescription'),
+    //                     help_text_default: 'URL of your remote image proxy server.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
+    //                         it.stateIsFalse('ImageProxySettings.Enable'),
+    //                         it.stateEquals('ImageProxySettings.ImageProxyType', 'local'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ImageProxySettings.RemoteImageProxyOptions',
+    //                     label: t('admin.image.proxyOptions'),
+    //                     label_default: 'Remote Image Proxy Options:',
+    //                     help_text: t('admin.image.proxyOptionsDescription'),
+    //                     help_text_default: 'Additional options such as the URL signing key. Refer to your image proxy documentation to learn more about what options are supported.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.IMAGE_PROXY)),
+    //                         it.stateIsFalse('ImageProxySettings.Enable'),
+    //                         it.stateEquals('ImageProxySettings.ImageProxyType', 'local'),
+    //                     ),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     smtp: {
+    //         url: 'environment/smtp',
+    //         title: t('admin.sidebar.smtp'),
+    //         title_default: 'SMTP',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //         ),
+    //         schema: {
+    //             id: 'SMTP',
+    //             name: t('admin.environment.smtp'),
+    //             name_default: 'SMTP',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'EmailSettings.SMTPServer',
+    //                     label: t('admin.environment.smtp.smtpServer.title'),
+    //                     label_default: 'SMTP Server:',
+    //                     placeholder: t('admin.environment.smtp.smtpServer.placeholder'),
+    //                     placeholder_default: 'Ex: "smtp.yourcompany.com", "email-smtp.us-east-1.amazonaws.com"',
+    //                     help_text: t('admin.environment.smtp.smtpServer.description'),
+    //                     help_text_default: 'Location of SMTP email server.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'EmailSettings.SMTPPort',
+    //                     label: t('admin.environment.smtp.smtpPort.title'),
+    //                     label_default: 'SMTP Server Port:',
+    //                     placeholder: t('admin.environment.smtp.smtpPort.placeholder'),
+    //                     placeholder_default: 'Ex: "25", "465", "587"',
+    //                     help_text: t('admin.environment.smtp.smtpPort.description'),
+    //                     help_text_default: 'Port of SMTP email server.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'EmailSettings.EnableSMTPAuth',
+    //                     label: t('admin.environment.smtp.smtpAuth.title'),
+    //                     label_default: 'Enable SMTP Authentication:',
+    //                     help_text: t('admin.environment.smtp.smtpAuth.description'),
+    //                     help_text_default: 'When true, SMTP Authentication is enabled.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'EmailSettings.SMTPUsername',
+    //                     label: t('admin.environment.smtp.smtpUsername.title'),
+    //                     label_default: 'SMTP Server Username:',
+    //                     placeholder: t('admin.environment.smtp.smtpUsername.placeholder'),
+    //                     placeholder_default: 'Ex: "admin@yourcompany.com", "AKIADTOVBGERKLCBV"',
+    //                     help_text: t('admin.environment.smtp.smtpUsername.description'),
+    //                     help_text_default: 'Obtain this credential from administrator setting up your email server.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                         it.stateIsFalse('EmailSettings.EnableSMTPAuth'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'EmailSettings.SMTPPassword',
+    //                     label: t('admin.environment.smtp.smtpPassword.title'),
+    //                     label_default: 'SMTP Server Password:',
+    //                     placeholder: t('admin.environment.smtp.smtpPassword.placeholder'),
+    //                     placeholder_default: 'Ex: "yourpassword", "jcuS8PuvcpGhpgHhlcpT1Mx42pnqMxQY"',
+    //                     help_text: t('admin.environment.smtp.smtpPassword.description'),
+    //                     help_text_default: 'Obtain this credential from administrator setting up your email server.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                         it.stateIsFalse('EmailSettings.EnableSMTPAuth'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'EmailSettings.ConnectionSecurity',
+    //                     label: t('admin.environment.smtp.connectionSecurity.title'),
+    //                     label_default: 'Connection Security:',
+    //                     help_text: DefinitionConstants.CONNECTION_SECURITY_HELP_TEXT_EMAIL,
+    //                     options: [
+    //                         {
+    //                             value: '',
+    //                             display_name: t('admin.environment.smtp.connectionSecurity.option.none'),
+    //                             display_name_default: 'None',
+    //                         },
+    //                         {
+    //                             value: 'TLS',
+    //                             display_name: t('admin.environment.smtp.connectionSecurity.option.tls'),
+    //                             display_name_default: 'TLS (Recommended)',
+    //                         },
+    //                         {
+    //                             value: 'STARTTLS',
+    //                             display_name: t('admin.environment.smtp.connectionSecurity.option.starttls'),
+    //                             display_name_default: 'STARTTLS',
+    //                         },
+    //                     ],
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BUTTON,
+    //                     action: testSmtp,
+    //                     key: 'TestSmtpConnection',
+    //                     label: t('admin.environment.smtp.connectionSmtpTest'),
+    //                     label_default: 'Test Connection',
+    //                     loading: t('admin.environment.smtp.testing'),
+    //                     loading_default: 'Testing...',
+    //                     error_message: t('admin.environment.smtp.smtpFail'),
+    //                     error_message_default: 'Connection unsuccessful: {error}',
+    //                     success_message: t('admin.environment.smtp.smtpSuccess'),
+    //                     success_message_default: 'No errors were reported while sending an email. Please check your inbox to make sure.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'EmailSettings.SkipServerCertificateVerification',
+    //                     label: t('admin.environment.smtp.skipServerCertificateVerification.title'),
+    //                     label_default: 'Skip Server Certificate Verification:',
+    //                     help_text: t('admin.environment.smtp.skipServerCertificateVerification.description'),
+    //                     help_text_default: 'When true, Mattermost will not verify the email server certificate.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableSecurityFixAlert',
+    //                     label: t('admin.environment.smtp.enableSecurityFixAlert.title'),
+    //                     label_default: 'Enable Security Alerts:',
+    //                     help_text: t('admin.environment.smtp.enableSecurityFixAlert.description'),
+    //                     help_text_default: 'When true, System Administrators are notified by email if a relevant security fix alert has been announced in the last 12 hours. Requires email to be enabled.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SMTP)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     push_notification_server: {
+    //         url: 'environment/push_notification_server',
+    //         title: t('admin.sidebar.pushNotificationServer'),
+    //         title_default: 'Push Notification Server',
+    //         searchableStrings: [
+    //             'admin.environment.pushNotificationServer',
+    //             'admin.email.pushTitle',
+    //             'admin.email.pushServerTitle',
+    //             'admin.email.pushContentTitle',
+    //             'admin.email.pushContentDesc',
+    //         ],
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PUSH_NOTIFICATION_SERVER)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PUSH_NOTIFICATION_SERVER)),
+    //         schema: {
+    //             id: 'PushNotificationsSettings',
+    //             component: PushNotificationsSettings,
+    //         },
+    //     },
+    //     high_availability: {
+    //         url: 'environment/high_availability',
+    //         title: t('admin.sidebar.highAvailability'),
+    //         title_default: 'High Availability',
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('Cluster')),
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+    //         ),
+    //         searchableStrings: [
+    //             'admin.advance.cluster',
+    //             'admin.cluster.noteDescription',
+    //             'admin.cluster.enableTitle',
+    //             'admin.cluster.enableDescription',
+    //             'admin.cluster.ClusterName',
+    //             'admin.cluster.ClusterNameDesc',
+    //             'admin.cluster.OverrideHostname',
+    //             'admin.cluster.OverrideHostnameDesc',
+    //             'admin.cluster.UseIPAddress',
+    //             'admin.cluster.UseIPAddressDesc',
+    //             'admin.cluster.EnableExperimentalGossipEncryption',
+    //             'admin.cluster.EnableExperimentalGossipEncryptionDesc',
+    //             'admin.cluster.EnableGossipCompression',
+    //             'admin.cluster.EnableGossipCompressionDesc',
+    //             'admin.cluster.GossipPort',
+    //             'admin.cluster.GossipPortDesc',
+    //             'admin.cluster.StreamingPort',
+    //             'admin.cluster.StreamingPortDesc',
+    //         ],
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.HIGH_AVAILABILITY)),
+    //         schema: {
+    //             id: 'ClusterSettings',
+    //             component: ClusterSettings,
+    //         },
+    //     },
+    //     rate_limiting: {
+    //         url: 'environment/rate_limiting',
+    //         title: t('admin.sidebar.rateLimiting'),
+    //         title_default: 'Rate Limiting',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //         ),
+    //         schema: {
+    //             id: 'ServiceSettings',
+    //             name: t('admin.rate.title'),
+    //             name_default: 'Rate Limiting',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BANNER,
+    //                     label: t('admin.rate.noteDescription'),
+    //                     label_default: 'Changing properties other than Site URL in this section will require a server restart before taking effect.',
+    //                     banner_type: 'info',
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'RateLimitSettings.Enable',
+    //                     label: t('admin.rate.enableLimiterTitle'),
+    //                     label_default: 'Enable Rate Limiting:',
+    //                     help_text: t('admin.rate.enableLimiterDescription'),
+    //                     help_text_default: 'When true, APIs are throttled at rates specified below.\n \nRate limiting prevents server overload from too many requests. This is useful to prevent third-party applications or malicous attacks from impacting your server.',
+    //                     help_text_markdown: true,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'RateLimitSettings.PerSec',
+    //                     label: t('admin.rate.queriesTitle'),
+    //                     label_default: 'Maximum Queries per Second:',
+    //                     placeholder: t('admin.rate.queriesExample'),
+    //                     placeholder_default: 'E.g.: "10"',
+    //                     help_text: t('admin.rate.queriesDescription'),
+    //                     help_text_default: 'Throttles API at this number of requests per second.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                         it.stateEquals('RateLimitSettings.Enable', false),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'RateLimitSettings.MaxBurst',
+    //                     label: t('admin.rate.maxBurst'),
+    //                     label_default: 'Maximum Burst Size:',
+    //                     placeholder: t('admin.rate.maxBurstExample'),
+    //                     placeholder_default: 'E.g.: "100"',
+    //                     help_text: t('admin.rate.maxBurstDescription'),
+    //                     help_text_default: 'Maximum number of requests allowed beyond the per second query limit.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                         it.stateEquals('RateLimitSettings.Enable', false),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'RateLimitSettings.MemoryStoreSize',
+    //                     label: t('admin.rate.memoryTitle'),
+    //                     label_default: 'Memory Store Size:',
+    //                     placeholder: t('admin.rate.memoryExample'),
+    //                     placeholder_default: 'E.g.: "10000"',
+    //                     help_text: t('admin.rate.memoryDescription'),
+    //                     help_text_default: 'Maximum number of users sessions connected to the system as determined by "Vary rate limit by remote address" and "Vary rate limit by HTTP header".',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                         it.stateEquals('RateLimitSettings.Enable', false),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'RateLimitSettings.VaryByRemoteAddr',
+    //                     label: t('admin.rate.remoteTitle'),
+    //                     label_default: 'Vary rate limit by remote address:',
+    //                     help_text: t('admin.rate.remoteDescription'),
+    //                     help_text_default: 'When true, rate limit API access by IP address.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                         it.stateEquals('RateLimitSettings.Enable', false),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'RateLimitSettings.VaryByUser',
+    //                     label: t('admin.rate.varyByUser'),
+    //                     label_default: 'Vary rate limit by user:',
+    //                     help_text: t('admin.rate.varyByUserDescription'),
+    //                     help_text_default: 'When true, rate limit API access by user athentication token.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                         it.stateEquals('RateLimitSettings.Enable', false),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'RateLimitSettings.VaryByHeader',
+    //                     label: t('admin.rate.httpHeaderTitle'),
+    //                     label_default: 'Vary rate limit by HTTP header:',
+    //                     placeholder: t('admin.rate.httpHeaderExample'),
+    //                     placeholder_default: 'E.g.: "X-Real-IP", "X-Forwarded-For"',
+    //                     help_text: t('admin.rate.httpHeaderDescription'),
+    //                     help_text_default: 'When filled in, vary rate limiting by HTTP header field specified (e.g. when configuring NGINX set to "X-Real-IP", when configuring AmazonELB set to "X-Forwarded-For").',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.RATE_LIMITING)),
+    //                         it.stateEquals('RateLimitSettings.Enable', false),
+    //                         it.stateEquals('RateLimitSettings.VaryByRemoteAddr', true),
+    //                     ),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     logging: {
+    //         url: 'environment/logging',
+    //         title: t('admin.sidebar.logging'),
+    //         title_default: 'Logging',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //         ),
+    //         schema: {
+    //             id: 'LogSettings',
+    //             name: t('admin.general.log'),
+    //             name_default: 'Logging',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'LogSettings.EnableConsole',
+    //                     label: t('admin.log.consoleTitle'),
+    //                     label_default: 'Output logs to console: ',
+    //                     help_text: t('admin.log.consoleDescription'),
+    //                     help_text_default: 'Typically set to false in production. Developers may set this field to true to output log messages to console based on the console level option.  If true, server writes messages to the standard output stream (stdout). Changing this setting requires a server restart before taking effect.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'LogSettings.ConsoleLevel',
+    //                     label: t('admin.log.levelTitle'),
+    //                     label_default: 'Console Log Level:',
+    //                     help_text: t('admin.log.levelDescription'),
+    //                     help_text_default: 'This setting determines the level of detail at which log events are written to the console. ERROR: Outputs only error messages. INFO: Outputs error messages and information around startup and initialization. DEBUG: Prints high detail for developers working on debugging issues.',
+    //                     options: DefinitionConstants.LOG_LEVEL_OPTIONS,
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                         it.stateIsFalse('LogSettings.EnableConsole'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'LogSettings.ConsoleJson',
+    //                     label: t('admin.log.consoleJsonTitle'),
+    //                     label_default: 'Output console logs as JSON:',
+    //                     help_text: t('admin.log.jsonDescription'),
+    //                     help_text_default: 'When true, logged events are written in a machine readable JSON format. Otherwise they are printed as plain text. Changing this setting requires a server restart before taking effect.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                         it.stateIsFalse('LogSettings.EnableConsole'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'LogSettings.EnableFile',
+    //                     label: t('admin.log.fileTitle'),
+    //                     label_default: 'Output logs to file: ',
+    //                     help_text: t('admin.log.fileDescription'),
+    //                     help_text_default: 'Typically set to true in production. When true, logged events are written to the mattermost.log file in the directory specified in the File Log Directory field. The logs are rotated at 100 MB and archived to a file in the same directory, and given a name with a datestamp and serial number. For example, mattermost.2017-03-31.001. Changing this setting requires a server restart before taking effect.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'LogSettings.FileLevel',
+    //                     label: t('admin.log.fileLevelTitle'),
+    //                     label_default: 'File Log Level:',
+    //                     help_text: t('admin.log.fileLevelDescription'),
+    //                     help_text_default: 'This setting determines the level of detail at which log events are written to the log file. ERROR: Outputs only error messages. INFO: Outputs error messages and information around startup and initialization. DEBUG: Prints high detail for developers working on debugging issues.',
+    //                     options: DefinitionConstants.LOG_LEVEL_OPTIONS,
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                         it.stateIsFalse('LogSettings.EnableFile'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'LogSettings.FileJson',
+    //                     label: t('admin.log.fileJsonTitle'),
+    //                     label_default: 'Output file logs as JSON:',
+    //                     help_text: t('admin.log.jsonDescription'),
+    //                     help_text_default: 'When true, logged events are written in a machine readable JSON format. Otherwise they are printed as plain text. Changing this setting requires a server restart before taking effect.',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                         it.stateIsFalse('LogSettings.EnableFile'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'LogSettings.FileLocation',
+    //                     label: t('admin.log.locationTitle'),
+    //                     label_default: 'File Log Directory:',
+    //                     help_text: t('admin.log.locationDescription'),
+    //                     help_text_default: 'The location of the log files. If blank, they are stored in the ./logs directory. The path that you set must exist and Mattermost must have write permissions in it. Changing this setting requires a server restart before taking effect.',
+    //                     placeholder: t('admin.log.locationPlaceholder'),
+    //                     placeholder_default: 'Enter your file location',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                         it.stateIsFalse('LogSettings.EnableFile'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'LogSettings.EnableWebhookDebugging',
+    //                     label: t('admin.log.enableWebhookDebugging'),
+    //                     label_default: 'Enable Webhook Debugging:',
+    //                     help_text: t('admin.log.enableWebhookDebuggingDescription'),
+    //                     help_text_default: 'When true, sends webhook debug messages to the server logs. To also output the request body of incoming webhooks, set {boldedLogLevel} to "DEBUG".',
+    //                     help_text_values: {
+    //                         boldedLogLevel: (
+    //                             <strong>
+    //                                 <FormattedMessage
+    //                                     id='admin.log.logLevel'
+    //                                     defaultMessage='Log Level'
+    //                                 />
+    //                             </strong>
+    //                         ),
+    //                     },
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'LogSettings.EnableDiagnostics',
+    //                     label: t('admin.log.enableDiagnostics'),
+    //                     label_default: 'Enable Diagnostics and Error Reporting:',
+    //                     help_text: t('admin.log.enableDiagnosticsDescription'),
+    //                     help_text_default: 'Enable this feature to improve the quality and performance of Mattermost by sending error reporting and diagnostic information to Mattermost, Inc. Read our <link>privacy policy</link> to learn more.',
+    //                     help_text_markdown: false,
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://mattermost.com/privacy-policy/'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     onConfigSave: (displayVal, previousVal) => {
+    //                         if (previousVal && previousVal !== displayVal) {
+    //                             trackEvent('ui', 'diagnostics_disabled');
+    //                         }
+    //                         return displayVal;
+    //                     },
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.LOGGING)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     session_lengths: {
+    //         url: 'environment/session_lengths',
+    //         title: t('admin.sidebar.sessionLengths'),
+    //         title_default: 'Session Lengths',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SESSION_LENGTHS)),
+    //         ),
+    //         searchableStrings: [
+    //             'admin.sessionLengths.title',
+    //             'admin.service.webSessionHoursDesc.extendLength',
+    //             'admin.service.mobileSessionHoursDesc.extendLength',
+    //             'admin.service.ssoSessionHoursDesc.extendLength',
+    //             'admin.service.webSessionHoursDesc',
+    //             'admin.service.mobileSessionHoursDesc',
+    //             'admin.service.ssoSessionHoursDesc',
+    //             'admin.service.sessionIdleTimeout',
+    //             'admin.service.sessionIdleTimeoutDesc',
+    //             'admin.service.extendSessionLengthActivity.label',
+    //             'admin.service.extendSessionLengthActivity.helpText',
+    //             'admin.service.webSessionHours',
+    //             'admin.service.sessionHoursEx',
+    //             'admin.service.mobileSessionHours',
+    //             'admin.service.ssoSessionHours',
+    //             'admin.service.sessionCache',
+    //             'admin.service.sessionCacheDesc',
+    //         ],
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.SESSION_LENGTHS)),
+    //         schema: {
+    //             id: 'SessionLengths',
+    //             component: SessionLengthSettings,
+    //         },
+    //     },
+    //     metrics: {
+    //         url: 'environment/performance_monitoring',
+    //         title: t('admin.sidebar.metrics'),
+    //         title_default: 'Performance Monitoring',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
+    //         ),
+    //         schema: {
+    //             id: 'MetricsSettings',
+    //             name: t('admin.advance.metrics'),
+    //             name_default: 'Performance Monitoring',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'MetricsSettings.Enable',
+    //                     label: t('admin.metrics.enableTitle'),
+    //                     label_default: 'Enable Performance Monitoring:',
+    //                     help_text: t('admin.metrics.enableDescription'),
+    //                     help_text_default: 'When true, Mattermost will enable performance monitoring collection and profiling. Please see <link>documentation</link> to learn more about configuring performance monitoring for Mattermost.',
+    //                     help_text_markdown: false,
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/deployment/metrics.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'MetricsSettings.ListenAddress',
+    //                     label: t('admin.metrics.listenAddressTitle'),
+    //                     label_default: 'Listen Address:',
+    //                     placeholder: t('admin.metrics.listenAddressEx'),
+    //                     placeholder_default: 'E.g.: ":8067"',
+    //                     help_text: t('admin.metrics.listenAddressDesc'),
+    //                     help_text_default: 'The address the server will listen on to expose performance metrics.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.PERFORMANCE_MONITORING)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     developer: {
+    //         url: 'environment/developer',
+    //         title: t('admin.sidebar.developer'),
+    //         title_default: 'Developer',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
+    //         ),
+    //         schema: {
+    //             id: 'ServiceSettings',
+    //             name: t('admin.developer.title'),
+    //             name_default: 'Developer Settings',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableTesting',
+    //                     label: t('admin.service.testingTitle'),
+    //                     label_default: 'Enable Testing Commands:',
+    //                     help_text: t('admin.service.testingDescription'),
+    //                     help_text_default: 'When true, /test slash command is enabled to load test accounts, data and text formatting. Changing this requires a server restart before taking effect.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableDeveloper',
+    //                     label: t('admin.service.developerTitle'),
+    //                     label_default: 'Enable Developer Mode: ',
+    //                     help_text: t('admin.service.developerDesc'),
+    //                     help_text_default: 'When true, JavaScript errors are shown in a purple bar at the top of the user interface. Not recommended for use in production.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableClientPerformanceDebugging',
+    //                     label: t('admin.service.performanceDebuggingTitle'),
+    //                     label_default: 'Enable Client Performance Debugging: ',
+    //                     help_text: t('admin.service.performanceDebuggingDescription'),
+    //                     help_text_default: 'When true, users can access debugging settings for their account in **Settings > Advanced > Performance Debugging** to assist in diagnosing performance issues.',
+    //                     help_text_markdown: true,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.AllowedUntrustedInternalConnections',
+    //                     label: t('admin.service.internalConnectionsTitle'),
+    //                     label_default: 'Allow untrusted internal connections to: ',
+    //                     placeholder: t('admin.service.internalConnectionsEx'),
+    //                     placeholder_default: 'webhooks.internal.example.com 127.0.0.1 10.0.16.0/28',
+    //                     help_text: t('admin.service.internalConnectionsDesc'),
+    //                     help_text_default: 'A whitelist of local network addresses that can be requested by the Mattermost server on behalf of a client. Care should be used when configuring this setting to prevent unintended access to your local network. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://mattermost.com/pl/default-allow-untrusted-internal-connections'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ENVIRONMENT.DEVELOPER)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    // },
     site: {
         icon: (
             <CogOutlineIcon
@@ -5711,1267 +5712,1267 @@ const AdminDefinition = {
             restrictedIndicator: getRestrictedIndicator(true),
         },
     },
-    plugins: {
-        icon: (
-            <PowerPlugOutlineIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.plugins'),
-        sectionTitleDefault: 'Plugins',
-        id: 'plugins',
-        isHidden: it.not(it.userHasReadPermissionOnResource('plugins')),
-        plugin_management: {
-            url: 'plugins/plugin_management',
-            title: t('admin.plugins.pluginManagement'),
-            title_default: 'Plugin Management',
-            searchableStrings: [
-                'admin.plugin.management.title',
-                'admin.plugins.settings.enable',
-                'admin.plugins.settings.enableDesc',
-                'admin.plugin.uploadTitle',
-                'admin.plugin.installedTitle',
-                'admin.plugin.installedDesc',
-                'admin.plugin.uploadDesc',
-                'admin.plugin.uploadDisabledDesc',
-                'admin.plugins.settings.enableMarketplace',
-                'admin.plugins.settings.enableMarketplaceDesc',
-                'admin.plugins.settings.enableRemoteMarketplace',
-                'admin.plugins.settings.enableRemoteMarketplaceDesc',
-                'admin.plugins.settings.automaticPrepackagedPlugins',
-                'admin.plugins.settings.automaticPrepackagedPluginsDesc',
-                'admin.plugins.settings.marketplaceUrl',
-                'admin.plugins.settings.marketplaceUrlDesc',
-            ],
-            isDisabled: it.not(it.userHasWritePermissionOnResource('plugins')),
-            schema: {
-                id: 'PluginManagementSettings',
-                component: PluginManagement,
-            },
-        },
-        custom: {
-            url: 'plugins/plugin_:plugin_id',
-            isDisabled: it.not(it.userHasWritePermissionOnResource('plugins')),
-            schema: {
-                id: 'CustomPluginSettings',
-                component: CustomPluginSettings,
-            },
-        },
-    },
-    products: {
-        icon: (
-            <ProductsIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.products'),
-        sectionTitleDefault: 'Products',
-        isHidden: it.any(
-            it.configIsFalse('FeatureFlags', 'BoardsProduct'),
-            it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.PRODUCTS)),
-        ),
-        boards: {
-            url: 'products/boards',
-            title: t('admin.sidebar.boards'),
-            title_default: 'Boards',
-            isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.PRODUCTS.BOARDS)),
-            schema: {
-                id: 'BoardsSettings',
-                name: t('admin.site.boards'),
-                name_default: 'Boards',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ProductSettings.EnablePublicSharedBoards',
-                        label: t('admin.customization.enablePublicSharedBoardsTitle'),
-                        label_default: 'Enable Public Shared Boards:',
-                        help_text: t('admin.customization.enablePublicSharedBoardsDesc'),
-                        help_text_default: 'This allows board editors to share boards that can be accessed by anyone with the link.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.PRODUCTS.BOARDS)),
-                    },
-                ],
-            },
-        },
-    },
-    integrations: {
-        icon: (
-            <SitemapIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.integrations'),
-        sectionTitleDefault: 'Integrations',
-        id: 'integrations',
-        isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.INTEGRATIONS)),
-        integration_management: {
-            url: 'integrations/integration_management',
-            title: t('admin.integrations.integrationManagement'),
-            title_default: 'Integration Management',
-            isHidden: it.all(
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-            ),
-            schema: {
-                id: 'CustomIntegrationSettings',
-                name: t('admin.integrations.integrationManagement.title'),
-                name_default: 'Integration Management',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableIncomingWebhooks',
-                        label: t('admin.service.webhooksTitle'),
-                        label_default: 'Enable Incoming Webhooks: ',
-                        help_text: t('admin.service.webhooksDescription'),
-                        help_text_default: 'When true, incoming webhooks will be allowed. To help combat phishing attacks, all posts from webhooks will be labelled by a BOT tag. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-incoming/'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableOutgoingWebhooks',
-                        label: t('admin.service.outWebhooksTitle'),
-                        label_default: 'Enable Outgoing Webhooks: ',
-                        help_text: t('admin.service.outWebhooksDesc'),
-                        help_text_default: 'When true, outgoing webhooks will be allowed. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-outgoing/'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableCommands',
-                        label: t('admin.service.cmdsTitle'),
-                        label_default: 'Enable Custom Slash Commands: ',
-                        help_text: t('admin.service.cmdsDesc'),
-                        help_text_default: 'When true, custom slash commands will be allowed. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-slash-commands/'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableOAuthServiceProvider',
-                        label: t('admin.oauth.providerTitle'),
-                        label_default: 'Enable OAuth 2.0 Service Provider: ',
-                        help_text: t('admin.oauth.providerDescription'),
-                        help_text_default: 'When true, Mattermost can act as an OAuth 2.0 service provider allowing Mattermost to authorize API requests from external applications. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-oauth2/'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                        isHidden: it.licensedForFeature('Cloud'),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnablePostUsernameOverride',
-                        label: t('admin.service.overrideTitle'),
-                        label_default: 'Enable integrations to override usernames:',
-                        help_text: t('admin.service.overrideDescription'),
-                        help_text_default: 'When true, webhooks, slash commands and other integrations will be allowed to change the username they are posting as. Note: Combined with allowing integrations to override profile picture icons, users may be able to perform phishing attacks by attempting to impersonate other users.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnablePostIconOverride',
-                        label: t('admin.service.iconTitle'),
-                        label_default: 'Enable integrations to override profile picture icons:',
-                        help_text: t('admin.service.iconDescription'),
-                        help_text_default: 'When true, webhooks, slash commands and other integrations will be allowed to change the profile picture they post with. Note: Combined with allowing integrations to override usernames, users may be able to perform phishing attacks by attempting to impersonate other users.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableUserAccessTokens',
-                        label: t('admin.service.userAccessTokensTitle'),
-                        label_default: 'Enable User Access Tokens: ',
-                        help_text: t('admin.service.userAccessTokensDescription'),
-                        help_text_default: 'When true, users can create <link>user access tokens</link> for integrations in <strong>Account Menu > Account Settings > Security</strong>. They can be used to authenticate against the API and give full access to the account.\n\n To manage who can create personal access tokens or to search users by token ID, go to the <strong>User Management > Users</strong> page.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://developers.mattermost.com/integrate/admin-guide/admin-personal-access-token/'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                            strong: (msg) => <strong>{msg}</strong>,
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
-                    },
-                ],
-            },
-        },
-        bot_accounts: {
-            url: 'integrations/bot_accounts',
-            title: t('admin.integrations.botAccounts'),
-            title_default: 'Bot Accounts',
-            isHidden: it.all(
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
-            ),
-            schema: {
-                id: 'BotAccountSettings',
-                name: t('admin.integrations.botAccounts.title'),
-                name_default: 'Bot Accounts',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableBotAccountCreation',
-                        label: t('admin.service.enableBotTitle'),
-                        label_default: 'Enable Bot Account Creation: ',
-                        help_text: t('admin.service.enableBotAccountCreation'),
-                        help_text_default: 'When true, System Admins can create bot accounts for integrations in <linkBots>Integrations > Bot Accounts</linkBots>. Bot accounts are similar to user accounts except they cannot be used to log in. See <linkDocumentation>documentation</linkDocumentation> to learn more.',
-                        help_text_markdown: false,
-                        help_text_values: {
-                            siteURL: getSiteURL(),
-                            linkDocumentation: (msg) => (
-                                <a
-                                    href='https://mattermost.com/pl/default-bot-accounts'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                            linkBots: (msg) => (
-                                <a
-                                    href={`${getSiteURL()}/_redirect/integrations/bots`}
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.DisableBotsWhenOwnerIsDeactivated',
-                        label: t('admin.service.disableBotOwnerDeactivatedTitle'),
-                        label_default: 'Disable bot accounts when owner is deactivated:',
-                        help_text: t('admin.service.disableBotWhenOwnerIsDeactivated'),
-                        help_text_default: 'When a user is deactivated, disables all bot accounts managed by the user. To re-enable bot accounts, go to [Integrations > Bot Accounts]({siteURL}/_redirect/integrations/bots).',
-                        help_text_markdown: true,
-                        help_text_values: {siteURL: getSiteURL()},
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
-                    },
-                ],
-            },
-        },
-        gif: {
-            url: 'integrations/gif',
-            title: t('admin.sidebar.gif'),
-            title_default: 'GIF (Beta)',
-            isHidden: it.all(
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
-            ),
-            schema: {
-                id: 'GifSettings',
-                name: t('admin.integrations.gif'),
-                name_default: 'GIF (Beta)',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableGifPicker',
-                        label: t('admin.customization.enableGifPickerTitle'),
-                        label_default: 'Enable GIF Picker:',
-                        help_text: t('admin.customization.enableGifPickerDesc'),
-                        help_text_default: 'Allow users to select GIFs from the emoji picker via a Gfycat integration.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.GfycatAPIKey',
-                        label: t('admin.customization.gfycatApiKey'),
-                        label_default: 'Gfycat API Key:',
-                        help_text: t('admin.customization.gfycatApiKeyDescription'),
-                        help_text_default: 'Request an API key at <link>https://developers.gfycat.com/signup/#</link>. Enter the client ID you receive via email to this field. When blank, uses the default API key provided by Gfycat.',
-                        help_text_markdown: false,
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://developers.gfycat.com/signup/#'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.GfycatAPISecret',
-                        label: t('admin.customization.gfycatApiSecret'),
-                        label_default: 'Gfycat API Secret:',
-                        help_text: t('admin.customization.gfycatApiSecretDescription'),
-                        help_text_default: 'The API secret generated by Gfycat for your API key. When blank, uses the default API secret provided by Gfycat.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
-                    },
-                ],
-            },
-        },
-        cors: {
-            url: 'integrations/cors',
-            title: t('admin.sidebar.cors'),
-            title_default: 'CORS',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
-            ),
-            schema: {
-                id: 'CORS',
-                name: t('admin.integrations.cors'),
-                name_default: 'CORS',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.AllowCorsFrom',
-                        label: t('admin.service.corsTitle'),
-                        label_default: 'Enable cross-origin requests from:',
-                        placeholder: t('admin.service.corsEx'),
-                        placeholder_default: 'http://example.com',
-                        help_text: t('admin.service.corsDescription'),
-                        help_text_default: 'Enable HTTP Cross origin request from a specific domain. Use "*" if you want to allow CORS from any domain or leave it blank to disable it. Should not be set to "*" in production.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ServiceSettings.CorsExposedHeaders',
-                        label: t('admin.service.corsExposedHeadersTitle'),
-                        label_default: 'CORS Exposed Headers:',
-                        placeholder: t('admin.service.corsHeadersEx'),
-                        placeholder_default: 'X-My-Header',
-                        help_text: t('admin.service.corsExposedHeadersDescription'),
-                        help_text_default: 'Whitelist of headers that will be accessible to the requester.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.CorsAllowCredentials',
-                        label: t('admin.service.corsAllowCredentialsLabel'),
-                        label_default: 'CORS Allow Credentials:',
-                        help_text: t('admin.service.corsAllowCredentialsDescription'),
-                        help_text_default: 'When true, requests that pass validation will include the Access-Control-Allow-Credentials header.',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.CorsDebug',
-                        label: t('admin.service.CorsDebugLabel'),
-                        label_default: 'CORS Debug:',
-                        help_text: t('admin.service.corsDebugDescription'),
-                        help_text_default: 'When true, prints messages to the logs to help when developing an integration that uses CORS. These messages will include the structured key value pair "source":"cors".',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
-                    },
-                ],
-            },
-        },
-    },
-    compliance: {
-        icon: (
-            <FormatListBulletedIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.compliance'),
-        sectionTitleDefault: 'Compliance',
-        isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE)),
-        custom_policy_form_edit: {
-            url: 'compliance/data_retention_settings/custom_policy/:policy_id',
-            isHidden: it.any(
-                it.not(it.licensedForFeature('DataRetention')),
-                it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            schema: {
-                id: 'CustomDataRetentionForm',
-                component: CustomDataRetentionForm,
-            },
+    // plugins: {
+    //     icon: (
+    //         <PowerPlugOutlineIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.plugins'),
+    //     sectionTitleDefault: 'Plugins',
+    //     id: 'plugins',
+    //     isHidden: it.not(it.userHasReadPermissionOnResource('plugins')),
+    //     plugin_management: {
+    //         url: 'plugins/plugin_management',
+    //         title: t('admin.plugins.pluginManagement'),
+    //         title_default: 'Plugin Management',
+    //         searchableStrings: [
+    //             'admin.plugin.management.title',
+    //             'admin.plugins.settings.enable',
+    //             'admin.plugins.settings.enableDesc',
+    //             'admin.plugin.uploadTitle',
+    //             'admin.plugin.installedTitle',
+    //             'admin.plugin.installedDesc',
+    //             'admin.plugin.uploadDesc',
+    //             'admin.plugin.uploadDisabledDesc',
+    //             'admin.plugins.settings.enableMarketplace',
+    //             'admin.plugins.settings.enableMarketplaceDesc',
+    //             'admin.plugins.settings.enableRemoteMarketplace',
+    //             'admin.plugins.settings.enableRemoteMarketplaceDesc',
+    //             'admin.plugins.settings.automaticPrepackagedPlugins',
+    //             'admin.plugins.settings.automaticPrepackagedPluginsDesc',
+    //             'admin.plugins.settings.marketplaceUrl',
+    //             'admin.plugins.settings.marketplaceUrlDesc',
+    //         ],
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('plugins')),
+    //         schema: {
+    //             id: 'PluginManagementSettings',
+    //             component: PluginManagement,
+    //         },
+    //     },
+    //     custom: {
+    //         url: 'plugins/plugin_:plugin_id',
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource('plugins')),
+    //         schema: {
+    //             id: 'CustomPluginSettings',
+    //             component: CustomPluginSettings,
+    //         },
+    //     },
+    // },
+    // products: {
+    //     icon: (
+    //         <ProductsIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.products'),
+    //     sectionTitleDefault: 'Products',
+    //     isHidden: it.any(
+    //         it.configIsFalse('FeatureFlags', 'BoardsProduct'),
+    //         it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.PRODUCTS)),
+    //     ),
+    //     boards: {
+    //         url: 'products/boards',
+    //         title: t('admin.sidebar.boards'),
+    //         title_default: 'Boards',
+    //         isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.PRODUCTS.BOARDS)),
+    //         schema: {
+    //             id: 'BoardsSettings',
+    //             name: t('admin.site.boards'),
+    //             name_default: 'Boards',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ProductSettings.EnablePublicSharedBoards',
+    //                     label: t('admin.customization.enablePublicSharedBoardsTitle'),
+    //                     label_default: 'Enable Public Shared Boards:',
+    //                     help_text: t('admin.customization.enablePublicSharedBoardsDesc'),
+    //                     help_text_default: 'This allows board editors to share boards that can be accessed by anyone with the link.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.PRODUCTS.BOARDS)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    // },
+    // integrations: {
+    //     icon: (
+    //         <SitemapIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.integrations'),
+    //     sectionTitleDefault: 'Integrations',
+    //     id: 'integrations',
+    //     isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.INTEGRATIONS)),
+    //     integration_management: {
+    //         url: 'integrations/integration_management',
+    //         title: t('admin.integrations.integrationManagement'),
+    //         title_default: 'Integration Management',
+    //         isHidden: it.all(
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //         ),
+    //         schema: {
+    //             id: 'CustomIntegrationSettings',
+    //             name: t('admin.integrations.integrationManagement.title'),
+    //             name_default: 'Integration Management',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableIncomingWebhooks',
+    //                     label: t('admin.service.webhooksTitle'),
+    //                     label_default: 'Enable Incoming Webhooks: ',
+    //                     help_text: t('admin.service.webhooksDescription'),
+    //                     help_text_default: 'When true, incoming webhooks will be allowed. To help combat phishing attacks, all posts from webhooks will be labelled by a BOT tag. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-incoming/'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableOutgoingWebhooks',
+    //                     label: t('admin.service.outWebhooksTitle'),
+    //                     label_default: 'Enable Outgoing Webhooks: ',
+    //                     help_text: t('admin.service.outWebhooksDesc'),
+    //                     help_text_default: 'When true, outgoing webhooks will be allowed. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://developers.mattermost.com/integrate/admin-guide/admin-webhooks-outgoing/'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableCommands',
+    //                     label: t('admin.service.cmdsTitle'),
+    //                     label_default: 'Enable Custom Slash Commands: ',
+    //                     help_text: t('admin.service.cmdsDesc'),
+    //                     help_text_default: 'When true, custom slash commands will be allowed. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://developers.mattermost.com/integrate/admin-guide/admin-slash-commands/'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableOAuthServiceProvider',
+    //                     label: t('admin.oauth.providerTitle'),
+    //                     label_default: 'Enable OAuth 2.0 Service Provider: ',
+    //                     help_text: t('admin.oauth.providerDescription'),
+    //                     help_text_default: 'When true, Mattermost can act as an OAuth 2.0 service provider allowing Mattermost to authorize API requests from external applications. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://developers.mattermost.com/integrate/admin-guide/admin-oauth2/'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                     isHidden: it.licensedForFeature('Cloud'),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnablePostUsernameOverride',
+    //                     label: t('admin.service.overrideTitle'),
+    //                     label_default: 'Enable integrations to override usernames:',
+    //                     help_text: t('admin.service.overrideDescription'),
+    //                     help_text_default: 'When true, webhooks, slash commands and other integrations will be allowed to change the username they are posting as. Note: Combined with allowing integrations to override profile picture icons, users may be able to perform phishing attacks by attempting to impersonate other users.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnablePostIconOverride',
+    //                     label: t('admin.service.iconTitle'),
+    //                     label_default: 'Enable integrations to override profile picture icons:',
+    //                     help_text: t('admin.service.iconDescription'),
+    //                     help_text_default: 'When true, webhooks, slash commands and other integrations will be allowed to change the profile picture they post with. Note: Combined with allowing integrations to override usernames, users may be able to perform phishing attacks by attempting to impersonate other users.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableUserAccessTokens',
+    //                     label: t('admin.service.userAccessTokensTitle'),
+    //                     label_default: 'Enable User Access Tokens: ',
+    //                     help_text: t('admin.service.userAccessTokensDescription'),
+    //                     help_text_default: 'When true, users can create <link>user access tokens</link> for integrations in <strong>Account Menu > Account Settings > Security</strong>. They can be used to authenticate against the API and give full access to the account.\n\n To manage who can create personal access tokens or to search users by token ID, go to the <strong>User Management > Users</strong> page.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://developers.mattermost.com/integrate/admin-guide/admin-personal-access-token/'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                         strong: (msg) => <strong>{msg}</strong>,
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.INTEGRATION_MANAGEMENT)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     bot_accounts: {
+    //         url: 'integrations/bot_accounts',
+    //         title: t('admin.integrations.botAccounts'),
+    //         title_default: 'Bot Accounts',
+    //         isHidden: it.all(
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
+    //         ),
+    //         schema: {
+    //             id: 'BotAccountSettings',
+    //             name: t('admin.integrations.botAccounts.title'),
+    //             name_default: 'Bot Accounts',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableBotAccountCreation',
+    //                     label: t('admin.service.enableBotTitle'),
+    //                     label_default: 'Enable Bot Account Creation: ',
+    //                     help_text: t('admin.service.enableBotAccountCreation'),
+    //                     help_text_default: 'When true, System Admins can create bot accounts for integrations in <linkBots>Integrations > Bot Accounts</linkBots>. Bot accounts are similar to user accounts except they cannot be used to log in. See <linkDocumentation>documentation</linkDocumentation> to learn more.',
+    //                     help_text_markdown: false,
+    //                     help_text_values: {
+    //                         siteURL: getSiteURL(),
+    //                         linkDocumentation: (msg) => (
+    //                             <a
+    //                                 href='https://mattermost.com/pl/default-bot-accounts'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                         linkBots: (msg) => (
+    //                             <a
+    //                                 href={`${getSiteURL()}/_redirect/integrations/bots`}
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.DisableBotsWhenOwnerIsDeactivated',
+    //                     label: t('admin.service.disableBotOwnerDeactivatedTitle'),
+    //                     label_default: 'Disable bot accounts when owner is deactivated:',
+    //                     help_text: t('admin.service.disableBotWhenOwnerIsDeactivated'),
+    //                     help_text_default: 'When a user is deactivated, disables all bot accounts managed by the user. To re-enable bot accounts, go to [Integrations > Bot Accounts]({siteURL}/_redirect/integrations/bots).',
+    //                     help_text_markdown: true,
+    //                     help_text_values: {siteURL: getSiteURL()},
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.BOT_ACCOUNTS)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     gif: {
+    //         url: 'integrations/gif',
+    //         title: t('admin.sidebar.gif'),
+    //         title_default: 'GIF (Beta)',
+    //         isHidden: it.all(
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
+    //         ),
+    //         schema: {
+    //             id: 'GifSettings',
+    //             name: t('admin.integrations.gif'),
+    //             name_default: 'GIF (Beta)',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableGifPicker',
+    //                     label: t('admin.customization.enableGifPickerTitle'),
+    //                     label_default: 'Enable GIF Picker:',
+    //                     help_text: t('admin.customization.enableGifPickerDesc'),
+    //                     help_text_default: 'Allow users to select GIFs from the emoji picker via a Gfycat integration.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.GfycatAPIKey',
+    //                     label: t('admin.customization.gfycatApiKey'),
+    //                     label_default: 'Gfycat API Key:',
+    //                     help_text: t('admin.customization.gfycatApiKeyDescription'),
+    //                     help_text_default: 'Request an API key at <link>https://developers.gfycat.com/signup/#</link>. Enter the client ID you receive via email to this field. When blank, uses the default API key provided by Gfycat.',
+    //                     help_text_markdown: false,
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://developers.gfycat.com/signup/#'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.GfycatAPISecret',
+    //                     label: t('admin.customization.gfycatApiSecret'),
+    //                     label_default: 'Gfycat API Secret:',
+    //                     help_text: t('admin.customization.gfycatApiSecretDescription'),
+    //                     help_text_default: 'The API secret generated by Gfycat for your API key. When blank, uses the default API secret provided by Gfycat.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.GIF)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     cors: {
+    //         url: 'integrations/cors',
+    //         title: t('admin.sidebar.cors'),
+    //         title_default: 'CORS',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+    //         ),
+    //         schema: {
+    //             id: 'CORS',
+    //             name: t('admin.integrations.cors'),
+    //             name_default: 'CORS',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.AllowCorsFrom',
+    //                     label: t('admin.service.corsTitle'),
+    //                     label_default: 'Enable cross-origin requests from:',
+    //                     placeholder: t('admin.service.corsEx'),
+    //                     placeholder_default: 'http://example.com',
+    //                     help_text: t('admin.service.corsDescription'),
+    //                     help_text_default: 'Enable HTTP Cross origin request from a specific domain. Use "*" if you want to allow CORS from any domain or leave it blank to disable it. Should not be set to "*" in production.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ServiceSettings.CorsExposedHeaders',
+    //                     label: t('admin.service.corsExposedHeadersTitle'),
+    //                     label_default: 'CORS Exposed Headers:',
+    //                     placeholder: t('admin.service.corsHeadersEx'),
+    //                     placeholder_default: 'X-My-Header',
+    //                     help_text: t('admin.service.corsExposedHeadersDescription'),
+    //                     help_text_default: 'Whitelist of headers that will be accessible to the requester.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.CorsAllowCredentials',
+    //                     label: t('admin.service.corsAllowCredentialsLabel'),
+    //                     label_default: 'CORS Allow Credentials:',
+    //                     help_text: t('admin.service.corsAllowCredentialsDescription'),
+    //                     help_text_default: 'When true, requests that pass validation will include the Access-Control-Allow-Credentials header.',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.CorsDebug',
+    //                     label: t('admin.service.CorsDebugLabel'),
+    //                     label_default: 'CORS Debug:',
+    //                     help_text: t('admin.service.corsDebugDescription'),
+    //                     help_text_default: 'When true, prints messages to the logs to help when developing an integration that uses CORS. These messages will include the structured key value pair "source":"cors".',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.INTEGRATIONS.CORS)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    // },
+    // compliance: {
+    //     icon: (
+    //         <FormatListBulletedIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.compliance'),
+    //     sectionTitleDefault: 'Compliance',
+    //     isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE)),
+    //     custom_policy_form_edit: {
+    //         url: 'compliance/data_retention_settings/custom_policy/:policy_id',
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('DataRetention')),
+    //             it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         schema: {
+    //             id: 'CustomDataRetentionForm',
+    //             component: CustomDataRetentionForm,
+    //         },
 
-        },
-        custom_policy_form: {
-            url: 'compliance/data_retention_settings/custom_policy',
-            isHidden: it.any(
-                it.not(it.licensedForFeature('DataRetention')),
-                it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            schema: {
-                id: 'CustomDataRetentionForm',
-                component: CustomDataRetentionForm,
-            },
+    //     },
+    //     custom_policy_form: {
+    //         url: 'compliance/data_retention_settings/custom_policy',
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('DataRetention')),
+    //             it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         schema: {
+    //             id: 'CustomDataRetentionForm',
+    //             component: CustomDataRetentionForm,
+    //         },
 
-        },
-        global_policy_form: {
-            url: 'compliance/data_retention_settings/global_policy',
-            isHidden: it.any(
-                it.not(it.licensedForFeature('DataRetention')),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            schema: {
-                id: 'GlobalDataRetentionForm',
-                component: GlobalDataRetentionForm,
-            },
-        },
-        data_retention: {
-            url: 'compliance/data_retention_settings',
-            title: t('admin.sidebar.dataRetentionSettingsPolicies'),
-            title_default: 'Data Retention Policies',
-            searchableStrings: [
-                'admin.data_retention.title',
-                'admin.data_retention.createJob.title',
-                'admin.data_retention.settings.title',
-                'admin.data_retention.globalPolicy.title',
-                'admin.data_retention.globalPolicy.subTitle',
-                'admin.data_retention.customPolicies.title',
-                'admin.data_retention.customPolicies.subTitle',
-                'admin.data_retention.jobCreation.title',
-                'admin.data_retention.jobCreation.subTitle',
-                'admin.data_retention.createJob.instructions',
-            ],
-            isHidden: it.any(
-                it.not(it.licensedForFeature('DataRetention')),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
-            schema: {
-                id: 'DataRetentionSettings',
-                component: DataRetentionSettings,
-            },
-            restrictedIndicator: getRestrictedIndicator(),
-        },
-        data_retention_feature_discovery: {
-            url: 'compliance/data_retention',
-            isDiscovery: true,
-            title: t('admin.sidebar.dataRetentionPolicy'),
-            title_default: 'Data Retention Policy',
-            isHidden: it.any(
-                it.licensedForFeature('DataRetention'),
-                it.not(it.enterpriseReady),
-            ),
-            schema: {
-                id: 'DataRetentionSettings',
-                name: t('admin.data_retention.title'),
-                name_default: 'Data Retention Policy',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_CUSTOM,
-                        component: DataRetentionFeatureDiscovery,
-                        key: 'DataRetentionFeatureDiscovery',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
-                    },
-                ],
-            },
-            restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
-        },
-        message_export: {
-            url: 'compliance/export',
-            title: t('admin.sidebar.complianceExport'),
-            title_default: 'Compliance Export',
-            searchableStrings: [
-                'admin.service.complianceExportTitle',
-                'admin.service.complianceExportDesc',
-                'admin.complianceExport.exportJobStartTime.title',
-                'admin.complianceExport.exportJobStartTime.description',
-                'admin.complianceExport.exportFormat.title',
-                ['admin.complianceExport.exportFormat.description', {siteURL: ''}],
-                'admin.complianceExport.createJob.title',
-                'admin.complianceExport.createJob.help',
-                'admin.complianceExport.globalRelayCustomerType.title',
-                'admin.complianceExport.globalRelayCustomerType.description',
-                'admin.complianceExport.globalRelaySMTPUsername.title',
-                'admin.complianceExport.globalRelaySMTPUsername.description',
-                'admin.complianceExport.globalRelaySMTPPassword.title',
-                'admin.complianceExport.globalRelaySMTPPassword.description',
-                'admin.complianceExport.globalRelayEmailAddress.title',
-                'admin.complianceExport.globalRelayEmailAddress.description',
-            ],
-            isHidden: it.any(
-                it.not(it.licensedForFeature('MessageExport')),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_EXPORT)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_EXPORT)),
-            schema: {
-                id: 'MessageExportSettings',
-                component: MessageExportSettings,
-            },
-            restrictedIndicator: getRestrictedIndicator(),
-        },
-        compliance_export_feature_discovery: {
-            isDiscovery: true,
-            url: 'compliance/export',
-            title: t('admin.sidebar.complianceExport'),
-            title_default: 'Compliance Export',
-            isHidden: it.any(
-                it.licensedForFeature('MessageExport'),
-                it.not(it.enterpriseReady),
-            ),
-            schema: {
-                id: 'MessageExportSettings',
-                name: t('admin.complianceExport.title'),
-                name_default: 'Compliance Export',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_CUSTOM,
-                        component: ComplianceExportFeatureDiscovery,
-                        key: 'ComplianceExportFeatureDiscovery',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
-                    },
-                ],
-            },
-            restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
-        },
-        audits: {
-            url: 'compliance/monitoring',
-            title: t('admin.sidebar.complianceMonitoring'),
-            title_default: 'Compliance Monitoring',
-            isHidden: it.any(
-                it.not(it.licensedForFeature('Compliance')),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
-            searchableStrings: [
-                'admin.audits.title',
-                'admin.audits.reload',
-            ],
-            schema: {
-                id: 'Audits',
-                name: t('admin.compliance.complianceMonitoring'),
-                name_default: 'Compliance Monitoring',
-                component: Audits,
-                isHidden: it.not(it.licensedForFeature('Compliance')),
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_BANNER,
-                        label: t('admin.compliance.newComplianceExportBanner'),
-                        label_markdown: true,
-                        label_default: 'This feature is replaced by a new [Compliance Export]({siteURL}/admin_console/compliance/export) feature, and will be removed in a future release. We recommend migrating to the new system.',
-                        label_values: {siteURL: getSiteURL()},
-                        banner_type: 'info',
-                        isHidden: it.not(it.licensedForFeature('Compliance')),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ComplianceSettings.Enable',
-                        label: t('admin.compliance.enableTitle'),
-                        label_default: 'Enable Compliance Reporting:',
-                        help_text: t('admin.compliance.enableDesc'),
-                        help_text_default: 'When true, Mattermost allows compliance reporting from the <strong>Compliance and Auditing</strong> tab. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/administration/compliance.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                            strong: (msg) => <strong>{msg}</strong>,
-                        },
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('Compliance')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'ComplianceSettings.Directory',
-                        label: t('admin.compliance.directoryTitle'),
-                        label_default: 'Compliance Report Directory:',
-                        help_text: t('admin.compliance.directoryDescription'),
-                        help_text_default: 'Directory to which compliance reports are written. If blank, will be set to ./data/.',
-                        placeholder: t('admin.compliance.directoryExample'),
-                        placeholder_default: 'E.g.: "./data/"',
-                        isHidden: it.not(it.licensedForFeature('Compliance')),
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
-                            it.stateIsFalse('ComplianceSettings.Enable'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ComplianceSettings.EnableDaily',
-                        label: t('admin.compliance.enableDailyTitle'),
-                        label_default: 'Enable Daily Report:',
-                        help_text: t('admin.compliance.enableDailyDesc'),
-                        help_text_default: 'When true, Mattermost will generate a daily compliance report.',
-                        isHidden: it.not(it.licensedForFeature('Compliance')),
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
-                            it.stateIsFalse('ComplianceSettings.Enable'),
-                        ),
-                    },
-                ],
-            },
-        },
-        custom_terms_of_service: {
-            url: 'compliance/custom_terms_of_service',
-            title: t('admin.sidebar.customTermsOfService'),
-            title_default: 'Custom Terms of Service',
-            searchableStrings: [
-                'admin.support.termsOfServiceTitle',
-                'admin.support.enableTermsOfServiceTitle',
-                'admin.support.enableTermsOfServiceHelp',
-                'admin.support.termsOfServiceTextTitle',
-                'admin.support.termsOfServiceTextHelp',
-                'admin.support.termsOfServiceReAcceptanceTitle',
-                'admin.support.termsOfServiceReAcceptanceHelp',
-            ],
-            isHidden: it.any(
-                it.not(it.licensedForFeature('CustomTermsOfService')),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.CUSTOM_TERMS_OF_SERVICE)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.CUSTOM_TERMS_OF_SERVICE)),
-            schema: {
-                id: 'TermsOfServiceSettings',
-                component: CustomTermsOfServiceSettings,
-            },
-            restrictedIndicator: getRestrictedIndicator(),
-        },
-        custom_terms_of_service_feature_discovery: {
-            url: 'compliance/custom_terms_of_service',
-            isDiscovery: true,
-            title: t('admin.sidebar.customTermsOfService'),
-            title_default: 'Custom Terms of Service',
-            isHidden: it.any(
-                it.licensedForFeature('CustomTermsOfService'),
-                it.not(it.enterpriseReady),
-            ),
-            schema: {
-                id: 'TermsOfServiceSettings',
-                name: t('admin.support.termsOfServiceTitle'),
-                name_default: 'Custom Terms of Service',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_CUSTOM,
-                        component: CustomTermsOfServiceFeatureDiscovery,
-                        key: 'CustomTermsOfServiceFeatureDiscovery',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
-                    },
-                ],
-            },
-            restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
-        },
-    },
-    experimental: {
-        icon: (
-            <FlaskOutlineIcon
-                size={16}
-                className={'category-icon fa'}
-                color={'currentColor'}
-            />
-        ),
-        sectionTitle: t('admin.sidebar.experimental'),
-        sectionTitleDefault: 'Experimental',
-        isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.EXPERIMENTAL)),
-        experimental_features: {
-            url: 'experimental/features',
-            title: t('admin.sidebar.experimentalFeatures'),
-            title_default: 'Features',
-            isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-            schema: {
-                id: 'ExperimentalSettings',
-                name: t('admin.experimental.experimentalFeatures'),
-                name_default: 'Experimental Features',
-                settings: [
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'LdapSettings.LoginButtonColor',
-                        label: t('admin.experimental.ldapSettingsLoginButtonColor.title'),
-                        label_default: 'AD/LDAP Login Button Color:',
-                        help_text: t('admin.experimental.ldapSettingsLoginButtonColor.desc'),
-                        help_text_default: 'Specify the color of the AD/LDAP login button for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('LDAP')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'LdapSettings.LoginButtonBorderColor',
-                        label: t('admin.experimental.ldapSettingsLoginButtonBorderColor.title'),
-                        label_default: 'AD/LDAP Login Button Border Color:',
-                        help_text: t('admin.experimental.ldapSettingsLoginButtonBorderColor.desc'),
-                        help_text_default: 'Specify the color of the AD/LDAP login button border for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('LDAP')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'LdapSettings.LoginButtonTextColor',
-                        label: t('admin.experimental.ldapSettingsLoginButtonTextColor.title'),
-                        label_default: 'AD/LDAP Login Button Text Color:',
-                        help_text: t('admin.experimental.ldapSettingsLoginButtonTextColor.desc'),
-                        help_text_default: 'Specify the color of the AD/LDAP login button text for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('LDAP')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.ExperimentalEnableAuthenticationTransfer',
-                        label: t('admin.experimental.experimentalEnableAuthenticationTransfer.title'),
-                        label_default: 'Allow Authentication Transfer:',
-                        help_text: t('admin.experimental.experimentalEnableAuthenticationTransfer.desc'),
-                        help_text_default: 'When true, users can change their sign-in method to any that is enabled on the server, any via Account Settings or the APIs. When false, Users cannot change their sign-in method, regardless of which authentication options are enabled.',
-                        help_text_markdown: false,
-                        isHidden: it.any( // documented as E20 and higher, but only E10 in the code
-                            it.not(it.licensed),
-                            it.licensedForSku('starter'),
-                        ),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'ExperimentalSettings.LinkMetadataTimeoutMilliseconds',
-                        label: t('admin.experimental.linkMetadataTimeoutMilliseconds.title'),
-                        label_default: 'Link Metadata Timeout:',
-                        help_text: t('admin.experimental.linkMetadataTimeoutMilliseconds.desc'),
-                        help_text_default: 'The number of milliseconds to wait for metadata from a third-party link. Used with Post Metadata.',
-                        help_text_markdown: false,
-                        placeholder: t('admin.experimental.linkMetadataTimeoutMilliseconds.example'),
-                        placeholder_default: 'E.g.: "5000"',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'EmailSettings.EmailBatchingBufferSize',
-                        label: t('admin.experimental.emailBatchingBufferSize.title'),
-                        label_default: 'Email Batching Buffer Size:',
-                        help_text: t('admin.experimental.emailBatchingBufferSize.desc'),
-                        help_text_default: 'Specify the maximum number of notifications batched into a single email.',
-                        help_text_markdown: false,
-                        placeholder: t('admin.experimental.emailBatchingBufferSize.example'),
-                        placeholder_default: 'E.g.: "256"',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'EmailSettings.EmailBatchingInterval',
-                        label: t('admin.experimental.emailBatchingInterval.title'),
-                        label_default: 'Email Batching Interval:',
-                        help_text: t('admin.experimental.emailBatchingInterval.desc'),
-                        help_text_default: 'Specify the maximum frequency, in seconds, which the batching job checks for new notifications. Longer batching intervals will increase performance.',
-                        help_text_markdown: false,
-                        placeholder: t('admin.experimental.emailBatchingInterval.example'),
-                        placeholder_default: 'E.g.: "30"',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'EmailSettings.LoginButtonColor',
-                        label: t('admin.experimental.emailSettingsLoginButtonColor.title'),
-                        label_default: 'Email Login Button Color:',
-                        help_text: t('admin.experimental.emailSettingsLoginButtonColor.desc'),
-                        help_text_default: 'Specify the color of the email login button for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'EmailSettings.LoginButtonBorderColor',
-                        label: t('admin.experimental.emailSettingsLoginButtonBorderColor.title'),
-                        label_default: 'Email Login Button Border Color:',
-                        help_text: t('admin.experimental.emailSettingsLoginButtonBorderColor.desc'),
-                        help_text_default: 'Specify the color of the email login button border for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'EmailSettings.LoginButtonTextColor',
-                        label: t('admin.experimental.emailSettingsLoginButtonTextColor.title'),
-                        label_default: 'Email Login Button Text Color:',
-                        help_text: t('admin.experimental.emailSettingsLoginButtonTextColor.desc'),
-                        help_text_default: 'Specify the color of the email login button text for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'TeamSettings.EnableUserDeactivation',
-                        label: t('admin.experimental.enableUserDeactivation.title'),
-                        label_default: 'Enable Account Deactivation:',
-                        help_text: t('admin.experimental.enableUserDeactivation.desc'),
-                        help_text_default: 'When true, users may deactivate their own account from **Settings > Advanced**. If a user deactivates their own account, they will get an email notification confirming they were deactivated. When false, users may not deactivate their own account.',
-                        help_text_markdown: true,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'TeamSettings.ExperimentalEnableAutomaticReplies',
-                        label: t('admin.experimental.experimentalEnableAutomaticReplies.title'),
-                        label_default: 'Enable Automatic Replies:',
-                        help_text: t('admin.experimental.experimentalEnableAutomaticReplies.desc'),
-                        help_text_default: 'When true, users can enable Automatic Replies in **Settings > Notifications**. Users set a custom message that will be automatically sent in response to Direct Messages. When false, disables the Automatic Direct Message Replies feature and hides it from Settings.',
-                        help_text_markdown: true,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableChannelViewedMessages',
-                        label: t('admin.experimental.enableChannelViewedMessages.title'),
-                        label_default: 'Enable Channel Viewed WebSocket Messages:',
-                        help_text: t('admin.experimental.enableChannelViewedMessages.desc'),
-                        help_text_default: 'This setting determines whether `channel_viewed` WebSocket events are sent, which synchronize unread notifications across clients and devices. Disabling the setting in larger deployments may improve server performance.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ExperimentalSettings.ClientSideCertEnable',
-                        label: t('admin.experimental.clientSideCertEnable.title'),
-                        label_default: 'Enable Client-Side Certification:',
-                        help_text: t('admin.experimental.clientSideCertEnable.desc'),
-                        help_text_default: 'Enables client-side certification for your Mattermost server. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/deployment/certificate-based-authentication.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isHidden: it.not(it.any(
-                            it.licensedForSku(LicenseSkus.Enterprise),
-                            it.licensedForSku(LicenseSkus.E20))),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'ExperimentalSettings.ClientSideCertCheck',
-                        label: t('admin.experimental.clientSideCertCheck.title'),
-                        label_default: 'Client-Side Certification Login Method:',
-                        help_text: t('admin.experimental.clientSideCertCheck.desc'),
-                        help_text_default: 'When **primary**, after the client side certificate is verified, user’s email is retrieved from the certificate and is used to log in without a password. When **secondary**, after the client side certificate is verified, user’s email is retrieved from the certificate and matched against the one supplied by the user. If they match, the user logs in with regular email/password credentials.',
-                        help_text_markdown: true,
-                        options: [
-                            {
-                                value: 'primary',
-                                display_name: 'primary',
-                                display_name_default: 'primary',
-                            },
-                            {
-                                value: 'secondary',
-                                display_name: 'secondary',
-                                display_name_default: 'secondary',
-                            },
-                        ],
-                        isHidden: it.not(it.any(
-                            it.licensedForSku(LicenseSkus.Enterprise),
-                            it.licensedForSku(LicenseSkus.E20))),
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                            it.stateIsFalse('ExperimentalSettings.ClientSideCertEnable'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.ExperimentalEnableDefaultChannelLeaveJoinMessages',
-                        label: t('admin.experimental.experimentalEnableDefaultChannelLeaveJoinMessages.title'),
-                        label_default: 'Enable Default Channel Leave/Join System Messages:',
-                        help_text: t('admin.experimental.experimentalEnableDefaultChannelLeaveJoinMessages.desc'),
-                        help_text_default: 'This setting determines whether team leave/join system messages are posted in the default town-square channel.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.ExperimentalEnableHardenedMode',
-                        label: t('admin.experimental.experimentalEnableHardenedMode.title'),
-                        label_default: 'Enable Hardened Mode:',
-                        help_text: t('admin.experimental.experimentalEnableHardenedMode.desc'),
-                        help_text_default: 'Enables a hardened mode for Mattermost that makes user experience trade-offs in the interest of security. See <link>documentation</link> to learn more.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/administration/config-settings.html#enable-hardened-mode-experimental'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnablePreviewFeatures',
-                        label: t('admin.experimental.enablePreviewFeatures.title'),
-                        label_default: 'Enable Preview Features:',
-                        help_text: t('admin.experimental.enablePreviewFeatures.desc'),
-                        help_text_default: 'When true, preview features can be enabled from **Settings > Advanced > Preview pre-release features**. When false, disables and hides preview features from **Settings > Advanced > Preview pre-release features**.',
-                        help_text_markdown: true,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ThemeSettings.EnableThemeSelection',
-                        label: t('admin.experimental.enableThemeSelection.title'),
-                        label_default: 'Enable Theme Selection:',
-                        help_text: t('admin.experimental.enableThemeSelection.desc'),
-                        help_text_default: 'Enables the **Display > Theme** tab in Settings so users can select their theme.',
-                        help_text_markdown: true,
-                        isHidden: it.any(
-                            it.not(it.licensed),
-                            it.licensedForSku('starter'),
-                        ),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ThemeSettings.AllowCustomThemes',
-                        label: t('admin.experimental.allowCustomThemes.title'),
-                        label_default: 'Allow Custom Themes:',
-                        help_text: t('admin.experimental.allowCustomThemes.desc'),
-                        help_text_default: 'Enables the **Display > Theme > Custom Theme** section in Settings.',
-                        help_text_markdown: true,
-                        isHidden: it.any(
-                            it.not(it.licensed),
-                            it.licensedForSku('starter'),
-                        ),
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                            it.stateIsFalse('ThemeSettings.EnableThemeSelection'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_DROPDOWN,
-                        key: 'ThemeSettings.DefaultTheme',
-                        label: t('admin.experimental.defaultTheme.title'),
-                        label_default: 'Default Theme:',
-                        help_text: t('admin.experimental.defaultTheme.desc'),
-                        help_text_default: 'Set a default theme that applies to all new users on the system.',
-                        help_text_markdown: true,
-                        options: [
-                            {
-                                value: 'denim',
-                                display_name: 'Denim',
-                                display_name_default: 'Denim',
-                            },
-                            {
-                                value: 'sapphire',
-                                display_name: 'Sapphire',
-                                display_name_default: 'Sapphire',
-                            },
-                            {
-                                value: 'quartz',
-                                display_name: 'Quartz',
-                                display_name_default: 'Quartz',
-                            },
-                            {
-                                value: 'indigo',
-                                display_name: 'Indigo',
-                                display_name_default: 'Indigo',
-                            },
-                            {
-                                value: 'onyx',
-                                display_name: 'Onyx',
-                                display_name_default: 'Onyx',
-                            },
-                        ],
-                        isHidden: it.any(
-                            it.not(it.licensed),
-                            it.licensedForSku('starter'),
-                        ),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableTutorial',
-                        label: t('admin.experimental.enableTutorial.title'),
-                        label_default: 'Enable Tutorial:',
-                        help_text: t('admin.experimental.enableTutorial.desc'),
-                        help_text_default: 'When true, users are prompted with a tutorial when they open Mattermost for the first time after account creation. When false, the tutorial is disabled, and users are placed in Town Square when they open Mattermost for the first time after account creation.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableOnboardingFlow',
-                        label: t('admin.experimental.enableOnboardingFlow.title'),
-                        label_default: 'Enable Onboarding:',
-                        help_text: t('admin.experimental.enableOnboardingFlow.desc'),
-                        help_text_default: 'When true, new users are shown steps to complete as part of an onboarding process',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ServiceSettings.EnableUserTypingMessages',
-                        label: t('admin.experimental.enableUserTypingMessages.title'),
-                        label_default: 'Enable User Typing Messages:',
-                        help_text: t('admin.experimental.enableUserTypingMessages.desc'),
-                        help_text_default: 'This setting determines whether "user is typing..." messages are displayed below the message box. Disabling the setting in larger deployments may improve server performance.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'ServiceSettings.TimeBetweenUserTypingUpdatesMilliseconds',
-                        label: t('admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.title'),
-                        label_default: 'User Typing Timeout:',
-                        help_text: t('admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.desc'),
-                        help_text_default: 'The number of milliseconds to wait between emitting user typing websocket events.',
-                        help_text_markdown: false,
-                        placeholder: t('admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.example'),
-                        placeholder_default: 'E.g.: "5000"',
-                        isDisabled: it.any(
-                            it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                            it.stateIsFalse('ServiceSettings.EnableUserTypingMessages'),
-                        ),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_TEXT,
-                        key: 'TeamSettings.ExperimentalPrimaryTeam',
-                        label: t('admin.experimental.experimentalPrimaryTeam.title'),
-                        label_default: 'Primary Team:',
-                        help_text: t('admin.experimental.experimentalPrimaryTeam.desc'),
-                        help_text_default: 'The primary team of which users on the server are members. When a primary team is set, the options to join other teams or leave the primary team are disabled.',
-                        help_text_markdown: true,
-                        placeholder: t('admin.experimental.experimentalPrimaryTeam.example'),
-                        placeholder_default: 'E.g.: "teamname"',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ExperimentalSettings.UseNewSAMLLibrary',
-                        label: t('admin.experimental.experimentalUseNewSAMLLibrary.title'),
-                        label_default: 'Use Improved SAML Library (Beta):',
-                        help_text: t('admin.experimental.experimentalUseNewSAMLLibrary.desc'),
-                        help_text_default: 'Enable an updated SAML Library, which does not require the XML Security Library (xmlsec1) to be installed. Warning: Not all providers have been tested. If you experience issues, please contact <linkSupport>support</linkSupport>. Changing this setting requires a server restart before taking effect.',
-                        help_text_markdown: false,
-                        help_text_values: {
-                            linkSupport: (msg) => (
-                                <a
-                                    href='https://mattermost.com/support'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isHidden: true || it.not(it.licensedForFeature('SAML')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'SamlSettings.LoginButtonColor',
-                        label: t('admin.experimental.samlSettingsLoginButtonColor.title'),
-                        label_default: 'SAML Login Button Color:',
-                        help_text: t('admin.experimental.samlSettingsLoginButtonColor.desc'),
-                        help_text_default: 'Specify the color of the SAML login button for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('SAML')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'SamlSettings.LoginButtonBorderColor',
-                        label: t('admin.experimental.samlSettingsLoginButtonBorderColor.title'),
-                        label_default: 'SAML Login Button Border Color:',
-                        help_text: t('admin.experimental.samlSettingsLoginButtonBorderColor.desc'),
-                        help_text_default: 'Specify the color of the SAML login button border for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('SAML')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_COLOR,
-                        key: 'SamlSettings.LoginButtonTextColor',
-                        label: t('admin.experimental.samlSettingsLoginButtonTextColor.title'),
-                        label_default: 'SAML Login Button Text Color:',
-                        help_text: t('admin.experimental.samlSettingsLoginButtonTextColor.desc'),
-                        help_text_default: 'Specify the color of the SAML login button text for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.licensedForFeature('SAML')),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'DisplaySettings.ExperimentalTimezone',
-                        label: t('admin.experimental.experimentalTimezone.title'),
-                        label_default: 'Timezone:',
-                        help_text: t('admin.experimental.experimentalTimezone.desc'),
-                        help_text_default: 'Select the timezone used for timestamps in the user interface and email notifications. When true, the Timezone section is visible in the Settings and a time zone is automatically assigned in the next active session. When false, the Timezone setting is hidden in the Settings.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'EmailSettings.UseChannelInEmailNotifications',
-                        label: t('admin.experimental.useChannelInEmailNotifications.title'),
-                        label_default: 'Use Channel Name in Email Notifications:',
-                        help_text: t('admin.experimental.useChannelInEmailNotifications.desc'),
-                        help_text_default: 'When true, channel and team name appears in email notification subject lines. Useful for servers using only one team. When false, only team name appears in email notification subject line.',
-                        help_text_markdown: false,
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_NUMBER,
-                        key: 'TeamSettings.UserStatusAwayTimeout',
-                        label: t('admin.experimental.userStatusAwayTimeout.title'),
-                        label_default: 'User Status Away Timeout:',
-                        help_text: t('admin.experimental.userStatusAwayTimeout.desc'),
-                        help_text_default: 'This setting defines the number of seconds after which the user’s status indicator changes to "Away", when they are away from Mattermost.',
-                        help_text_markdown: false,
-                        placeholder: t('admin.experimental.userStatusAwayTimeout.example'),
-                        placeholder_default: 'E.g.: "300"',
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ExperimentalSettings.EnableSharedChannels',
-                        label: t('admin.experimental.enableSharedChannels.title'),
-                        label_default: 'Enable Shared Channels:',
-                        help_text: t('admin.experimental.enableSharedChannels.desc'),
-                        help_text_default: 'Toggles Shared Channels',
-                        help_text_markdown: false,
-                        isHidden: it.not(it.any(
-                            it.licensedForFeature('SharedChannels'),
-                            it.licensedForSku(LicenseSkus.Enterprise),
-                            it.licensedForSku(LicenseSkus.Professional),
-                        )),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ExperimentalSettings.EnableAppBar',
-                        label: t('admin.experimental.enableAppBar.title'),
-                        label_default: 'Enable App Bar:',
-                        help_text: t('admin.experimental.enableAppBar.desc'),
-                        help_text_default: 'When true, all integrations move from the channel header to the App Bar. Channel header plugin icons that haven\'t explicitly registered an App Bar icon will be moved to the App Bar which may result in rendering issues. [See the documentation to learn more](https://docs.mattermost.com/welcome/what-changed-in-v70.html).',
-                        help_text_markdown: true,
-                        isHidden: it.licensedForFeature('Cloud'),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                    {
-                        type: Constants.SettingsTypes.TYPE_BOOL,
-                        key: 'ExperimentalSettings.PatchPluginsReactDOM',
-                        label: t('admin.experimental.patchPluginsReactDOM.title'),
-                        label_default: 'Patch React DOM used by plugins:',
-                        help_text: t('admin.experimental.patchPluginsReactDOM.desc'),
-                        help_text_default: 'When true, client-side plugins will be patched to use the version of React DOM provided by the web app. This should only be enabled if plugins break after upgrading to Mattermost 7.6. The server must be restarted for this setting to take effect. See the <link>Important Upgrade Notes</link> for more information.',
-                        help_text_values: {
-                            link: (msg) => (
-                                <a
-                                    href='https://docs.mattermost.com/upgrade/important-upgrade-notes.html'
-                                    target='_blank'
-                                    rel='noreferrer'
-                                >
-                                    {msg}
-                                </a>
-                            ),
-                        },
-                        isHidden: it.licensedForFeature('Cloud'),
-                        isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
-                    },
-                ],
-            },
-        },
-        feature_flags: {
-            url: 'experimental/feature_flags',
-            title: t('admin.feature_flags.title'),
-            title_default: 'Feature Flags',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURE_FLAGS)),
-            ),
-            isDisabled: true,
-            searchableStrings: [
-                'admin.feature_flags.title',
-            ],
-            schema: {
-                id: 'Feature Flags',
-                component: FeatureFlags,
-            },
-        },
-        bleve: {
-            url: 'experimental/blevesearch',
-            title: t('admin.sidebar.blevesearch'),
-            title_default: 'Bleve',
-            isHidden: it.any(
-                it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
-                it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.BLEVE)),
-            ),
-            isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.BLEVE)),
-            searchableStrings: [
-                'admin.bleve.title',
-                'admin.bleve.enableIndexingTitle',
-                ['admin.bleve.enableIndexingDescription', {documentationLink: ''}],
-                'admin.bleve.enableIndexingDescription.documentationLinkText',
-                'admin.bleve.bulkIndexingTitle',
-                'admin.bleve.createJob.help',
-                'admin.bleve.purgeIndexesHelpText',
-                'admin.bleve.purgeIndexesButton',
-                'admin.bleve.purgeIndexesButton.label',
-                'admin.bleve.enableSearchingTitle',
-                'admin.bleve.enableSearchingDescription',
-            ],
-            schema: {
-                id: 'BleveSettings',
-                component: BleveSettings,
-            },
-        },
-    },
+    //     },
+    //     global_policy_form: {
+    //         url: 'compliance/data_retention_settings/global_policy',
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('DataRetention')),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         schema: {
+    //             id: 'GlobalDataRetentionForm',
+    //             component: GlobalDataRetentionForm,
+    //         },
+    //     },
+    //     data_retention: {
+    //         url: 'compliance/data_retention_settings',
+    //         title: t('admin.sidebar.dataRetentionSettingsPolicies'),
+    //         title_default: 'Data Retention Policies',
+    //         searchableStrings: [
+    //             'admin.data_retention.title',
+    //             'admin.data_retention.createJob.title',
+    //             'admin.data_retention.settings.title',
+    //             'admin.data_retention.globalPolicy.title',
+    //             'admin.data_retention.globalPolicy.subTitle',
+    //             'admin.data_retention.customPolicies.title',
+    //             'admin.data_retention.customPolicies.subTitle',
+    //             'admin.data_retention.jobCreation.title',
+    //             'admin.data_retention.jobCreation.subTitle',
+    //             'admin.data_retention.createJob.instructions',
+    //         ],
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('DataRetention')),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.DATA_RETENTION_POLICY)),
+    //         schema: {
+    //             id: 'DataRetentionSettings',
+    //             component: DataRetentionSettings,
+    //         },
+    //         restrictedIndicator: getRestrictedIndicator(),
+    //     },
+    //     data_retention_feature_discovery: {
+    //         url: 'compliance/data_retention',
+    //         isDiscovery: true,
+    //         title: t('admin.sidebar.dataRetentionPolicy'),
+    //         title_default: 'Data Retention Policy',
+    //         isHidden: it.any(
+    //             it.licensedForFeature('DataRetention'),
+    //             it.not(it.enterpriseReady),
+    //         ),
+    //         schema: {
+    //             id: 'DataRetentionSettings',
+    //             name: t('admin.data_retention.title'),
+    //             name_default: 'Data Retention Policy',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_CUSTOM,
+    //                     component: DataRetentionFeatureDiscovery,
+    //                     key: 'DataRetentionFeatureDiscovery',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+    //                 },
+    //             ],
+    //         },
+    //         restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
+    //     },
+    //     message_export: {
+    //         url: 'compliance/export',
+    //         title: t('admin.sidebar.complianceExport'),
+    //         title_default: 'Compliance Export',
+    //         searchableStrings: [
+    //             'admin.service.complianceExportTitle',
+    //             'admin.service.complianceExportDesc',
+    //             'admin.complianceExport.exportJobStartTime.title',
+    //             'admin.complianceExport.exportJobStartTime.description',
+    //             'admin.complianceExport.exportFormat.title',
+    //             ['admin.complianceExport.exportFormat.description', {siteURL: ''}],
+    //             'admin.complianceExport.createJob.title',
+    //             'admin.complianceExport.createJob.help',
+    //             'admin.complianceExport.globalRelayCustomerType.title',
+    //             'admin.complianceExport.globalRelayCustomerType.description',
+    //             'admin.complianceExport.globalRelaySMTPUsername.title',
+    //             'admin.complianceExport.globalRelaySMTPUsername.description',
+    //             'admin.complianceExport.globalRelaySMTPPassword.title',
+    //             'admin.complianceExport.globalRelaySMTPPassword.description',
+    //             'admin.complianceExport.globalRelayEmailAddress.title',
+    //             'admin.complianceExport.globalRelayEmailAddress.description',
+    //         ],
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('MessageExport')),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_EXPORT)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_EXPORT)),
+    //         schema: {
+    //             id: 'MessageExportSettings',
+    //             component: MessageExportSettings,
+    //         },
+    //         restrictedIndicator: getRestrictedIndicator(),
+    //     },
+    //     compliance_export_feature_discovery: {
+    //         isDiscovery: true,
+    //         url: 'compliance/export',
+    //         title: t('admin.sidebar.complianceExport'),
+    //         title_default: 'Compliance Export',
+    //         isHidden: it.any(
+    //             it.licensedForFeature('MessageExport'),
+    //             it.not(it.enterpriseReady),
+    //         ),
+    //         schema: {
+    //             id: 'MessageExportSettings',
+    //             name: t('admin.complianceExport.title'),
+    //             name_default: 'Compliance Export',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_CUSTOM,
+    //                     component: ComplianceExportFeatureDiscovery,
+    //                     key: 'ComplianceExportFeatureDiscovery',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+    //                 },
+    //             ],
+    //         },
+    //         restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
+    //     },
+    //     audits: {
+    //         url: 'compliance/monitoring',
+    //         title: t('admin.sidebar.complianceMonitoring'),
+    //         title_default: 'Compliance Monitoring',
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('Compliance')),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
+    //         searchableStrings: [
+    //             'admin.audits.title',
+    //             'admin.audits.reload',
+    //         ],
+    //         schema: {
+    //             id: 'Audits',
+    //             name: t('admin.compliance.complianceMonitoring'),
+    //             name_default: 'Compliance Monitoring',
+    //             component: Audits,
+    //             isHidden: it.not(it.licensedForFeature('Compliance')),
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BANNER,
+    //                     label: t('admin.compliance.newComplianceExportBanner'),
+    //                     label_markdown: true,
+    //                     label_default: 'This feature is replaced by a new [Compliance Export]({siteURL}/admin_console/compliance/export) feature, and will be removed in a future release. We recommend migrating to the new system.',
+    //                     label_values: {siteURL: getSiteURL()},
+    //                     banner_type: 'info',
+    //                     isHidden: it.not(it.licensedForFeature('Compliance')),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ComplianceSettings.Enable',
+    //                     label: t('admin.compliance.enableTitle'),
+    //                     label_default: 'Enable Compliance Reporting:',
+    //                     help_text: t('admin.compliance.enableDesc'),
+    //                     help_text_default: 'When true, Mattermost allows compliance reporting from the <strong>Compliance and Auditing</strong> tab. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/administration/compliance.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                         strong: (msg) => <strong>{msg}</strong>,
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('Compliance')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'ComplianceSettings.Directory',
+    //                     label: t('admin.compliance.directoryTitle'),
+    //                     label_default: 'Compliance Report Directory:',
+    //                     help_text: t('admin.compliance.directoryDescription'),
+    //                     help_text_default: 'Directory to which compliance reports are written. If blank, will be set to ./data/.',
+    //                     placeholder: t('admin.compliance.directoryExample'),
+    //                     placeholder_default: 'E.g.: "./data/"',
+    //                     isHidden: it.not(it.licensedForFeature('Compliance')),
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
+    //                         it.stateIsFalse('ComplianceSettings.Enable'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ComplianceSettings.EnableDaily',
+    //                     label: t('admin.compliance.enableDailyTitle'),
+    //                     label_default: 'Enable Daily Report:',
+    //                     help_text: t('admin.compliance.enableDailyDesc'),
+    //                     help_text_default: 'When true, Mattermost will generate a daily compliance report.',
+    //                     isHidden: it.not(it.licensedForFeature('Compliance')),
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.COMPLIANCE_MONITORING)),
+    //                         it.stateIsFalse('ComplianceSettings.Enable'),
+    //                     ),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     custom_terms_of_service: {
+    //         url: 'compliance/custom_terms_of_service',
+    //         title: t('admin.sidebar.customTermsOfService'),
+    //         title_default: 'Custom Terms of Service',
+    //         searchableStrings: [
+    //             'admin.support.termsOfServiceTitle',
+    //             'admin.support.enableTermsOfServiceTitle',
+    //             'admin.support.enableTermsOfServiceHelp',
+    //             'admin.support.termsOfServiceTextTitle',
+    //             'admin.support.termsOfServiceTextHelp',
+    //             'admin.support.termsOfServiceReAcceptanceTitle',
+    //             'admin.support.termsOfServiceReAcceptanceHelp',
+    //         ],
+    //         isHidden: it.any(
+    //             it.not(it.licensedForFeature('CustomTermsOfService')),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.COMPLIANCE.CUSTOM_TERMS_OF_SERVICE)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.COMPLIANCE.CUSTOM_TERMS_OF_SERVICE)),
+    //         schema: {
+    //             id: 'TermsOfServiceSettings',
+    //             component: CustomTermsOfServiceSettings,
+    //         },
+    //         restrictedIndicator: getRestrictedIndicator(),
+    //     },
+    //     custom_terms_of_service_feature_discovery: {
+    //         url: 'compliance/custom_terms_of_service',
+    //         isDiscovery: true,
+    //         title: t('admin.sidebar.customTermsOfService'),
+    //         title_default: 'Custom Terms of Service',
+    //         isHidden: it.any(
+    //             it.licensedForFeature('CustomTermsOfService'),
+    //             it.not(it.enterpriseReady),
+    //         ),
+    //         schema: {
+    //             id: 'TermsOfServiceSettings',
+    //             name: t('admin.support.termsOfServiceTitle'),
+    //             name_default: 'Custom Terms of Service',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_CUSTOM,
+    //                     component: CustomTermsOfServiceFeatureDiscovery,
+    //                     key: 'CustomTermsOfServiceFeatureDiscovery',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.ABOUT.EDITION_AND_LICENSE)),
+    //                 },
+    //             ],
+    //         },
+    //         restrictedIndicator: getRestrictedIndicator(true, LicenseSkus.Enterprise),
+    //     },
+    // },
+    // experimental: {
+    //     icon: (
+    //         <FlaskOutlineIcon
+    //             size={16}
+    //             className={'category-icon fa'}
+    //             color={'currentColor'}
+    //         />
+    //     ),
+    //     sectionTitle: t('admin.sidebar.experimental'),
+    //     sectionTitleDefault: 'Experimental',
+    //     isHidden: it.not(it.userHasReadPermissionOnSomeResources(RESOURCE_KEYS.EXPERIMENTAL)),
+    //     experimental_features: {
+    //         url: 'experimental/features',
+    //         title: t('admin.sidebar.experimentalFeatures'),
+    //         title_default: 'Features',
+    //         isHidden: it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //         schema: {
+    //             id: 'ExperimentalSettings',
+    //             name: t('admin.experimental.experimentalFeatures'),
+    //             name_default: 'Experimental Features',
+    //             settings: [
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'LdapSettings.LoginButtonColor',
+    //                     label: t('admin.experimental.ldapSettingsLoginButtonColor.title'),
+    //                     label_default: 'AD/LDAP Login Button Color:',
+    //                     help_text: t('admin.experimental.ldapSettingsLoginButtonColor.desc'),
+    //                     help_text_default: 'Specify the color of the AD/LDAP login button for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('LDAP')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'LdapSettings.LoginButtonBorderColor',
+    //                     label: t('admin.experimental.ldapSettingsLoginButtonBorderColor.title'),
+    //                     label_default: 'AD/LDAP Login Button Border Color:',
+    //                     help_text: t('admin.experimental.ldapSettingsLoginButtonBorderColor.desc'),
+    //                     help_text_default: 'Specify the color of the AD/LDAP login button border for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('LDAP')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'LdapSettings.LoginButtonTextColor',
+    //                     label: t('admin.experimental.ldapSettingsLoginButtonTextColor.title'),
+    //                     label_default: 'AD/LDAP Login Button Text Color:',
+    //                     help_text: t('admin.experimental.ldapSettingsLoginButtonTextColor.desc'),
+    //                     help_text_default: 'Specify the color of the AD/LDAP login button text for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('LDAP')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.ExperimentalEnableAuthenticationTransfer',
+    //                     label: t('admin.experimental.experimentalEnableAuthenticationTransfer.title'),
+    //                     label_default: 'Allow Authentication Transfer:',
+    //                     help_text: t('admin.experimental.experimentalEnableAuthenticationTransfer.desc'),
+    //                     help_text_default: 'When true, users can change their sign-in method to any that is enabled on the server, any via Account Settings or the APIs. When false, Users cannot change their sign-in method, regardless of which authentication options are enabled.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.any( // documented as E20 and higher, but only E10 in the code
+    //                         it.not(it.licensed),
+    //                         it.licensedForSku('starter'),
+    //                     ),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'ExperimentalSettings.LinkMetadataTimeoutMilliseconds',
+    //                     label: t('admin.experimental.linkMetadataTimeoutMilliseconds.title'),
+    //                     label_default: 'Link Metadata Timeout:',
+    //                     help_text: t('admin.experimental.linkMetadataTimeoutMilliseconds.desc'),
+    //                     help_text_default: 'The number of milliseconds to wait for metadata from a third-party link. Used with Post Metadata.',
+    //                     help_text_markdown: false,
+    //                     placeholder: t('admin.experimental.linkMetadataTimeoutMilliseconds.example'),
+    //                     placeholder_default: 'E.g.: "5000"',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'EmailSettings.EmailBatchingBufferSize',
+    //                     label: t('admin.experimental.emailBatchingBufferSize.title'),
+    //                     label_default: 'Email Batching Buffer Size:',
+    //                     help_text: t('admin.experimental.emailBatchingBufferSize.desc'),
+    //                     help_text_default: 'Specify the maximum number of notifications batched into a single email.',
+    //                     help_text_markdown: false,
+    //                     placeholder: t('admin.experimental.emailBatchingBufferSize.example'),
+    //                     placeholder_default: 'E.g.: "256"',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'EmailSettings.EmailBatchingInterval',
+    //                     label: t('admin.experimental.emailBatchingInterval.title'),
+    //                     label_default: 'Email Batching Interval:',
+    //                     help_text: t('admin.experimental.emailBatchingInterval.desc'),
+    //                     help_text_default: 'Specify the maximum frequency, in seconds, which the batching job checks for new notifications. Longer batching intervals will increase performance.',
+    //                     help_text_markdown: false,
+    //                     placeholder: t('admin.experimental.emailBatchingInterval.example'),
+    //                     placeholder_default: 'E.g.: "30"',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'EmailSettings.LoginButtonColor',
+    //                     label: t('admin.experimental.emailSettingsLoginButtonColor.title'),
+    //                     label_default: 'Email Login Button Color:',
+    //                     help_text: t('admin.experimental.emailSettingsLoginButtonColor.desc'),
+    //                     help_text_default: 'Specify the color of the email login button for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'EmailSettings.LoginButtonBorderColor',
+    //                     label: t('admin.experimental.emailSettingsLoginButtonBorderColor.title'),
+    //                     label_default: 'Email Login Button Border Color:',
+    //                     help_text: t('admin.experimental.emailSettingsLoginButtonBorderColor.desc'),
+    //                     help_text_default: 'Specify the color of the email login button border for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'EmailSettings.LoginButtonTextColor',
+    //                     label: t('admin.experimental.emailSettingsLoginButtonTextColor.title'),
+    //                     label_default: 'Email Login Button Text Color:',
+    //                     help_text: t('admin.experimental.emailSettingsLoginButtonTextColor.desc'),
+    //                     help_text_default: 'Specify the color of the email login button text for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'TeamSettings.EnableUserDeactivation',
+    //                     label: t('admin.experimental.enableUserDeactivation.title'),
+    //                     label_default: 'Enable Account Deactivation:',
+    //                     help_text: t('admin.experimental.enableUserDeactivation.desc'),
+    //                     help_text_default: 'When true, users may deactivate their own account from **Settings > Advanced**. If a user deactivates their own account, they will get an email notification confirming they were deactivated. When false, users may not deactivate their own account.',
+    //                     help_text_markdown: true,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'TeamSettings.ExperimentalEnableAutomaticReplies',
+    //                     label: t('admin.experimental.experimentalEnableAutomaticReplies.title'),
+    //                     label_default: 'Enable Automatic Replies:',
+    //                     help_text: t('admin.experimental.experimentalEnableAutomaticReplies.desc'),
+    //                     help_text_default: 'When true, users can enable Automatic Replies in **Settings > Notifications**. Users set a custom message that will be automatically sent in response to Direct Messages. When false, disables the Automatic Direct Message Replies feature and hides it from Settings.',
+    //                     help_text_markdown: true,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableChannelViewedMessages',
+    //                     label: t('admin.experimental.enableChannelViewedMessages.title'),
+    //                     label_default: 'Enable Channel Viewed WebSocket Messages:',
+    //                     help_text: t('admin.experimental.enableChannelViewedMessages.desc'),
+    //                     help_text_default: 'This setting determines whether `channel_viewed` WebSocket events are sent, which synchronize unread notifications across clients and devices. Disabling the setting in larger deployments may improve server performance.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ExperimentalSettings.ClientSideCertEnable',
+    //                     label: t('admin.experimental.clientSideCertEnable.title'),
+    //                     label_default: 'Enable Client-Side Certification:',
+    //                     help_text: t('admin.experimental.clientSideCertEnable.desc'),
+    //                     help_text_default: 'Enables client-side certification for your Mattermost server. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/deployment/certificate-based-authentication.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.any(
+    //                         it.licensedForSku(LicenseSkus.Enterprise),
+    //                         it.licensedForSku(LicenseSkus.E20))),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'ExperimentalSettings.ClientSideCertCheck',
+    //                     label: t('admin.experimental.clientSideCertCheck.title'),
+    //                     label_default: 'Client-Side Certification Login Method:',
+    //                     help_text: t('admin.experimental.clientSideCertCheck.desc'),
+    //                     help_text_default: 'When **primary**, after the client side certificate is verified, user’s email is retrieved from the certificate and is used to log in without a password. When **secondary**, after the client side certificate is verified, user’s email is retrieved from the certificate and matched against the one supplied by the user. If they match, the user logs in with regular email/password credentials.',
+    //                     help_text_markdown: true,
+    //                     options: [
+    //                         {
+    //                             value: 'primary',
+    //                             display_name: 'primary',
+    //                             display_name_default: 'primary',
+    //                         },
+    //                         {
+    //                             value: 'secondary',
+    //                             display_name: 'secondary',
+    //                             display_name_default: 'secondary',
+    //                         },
+    //                     ],
+    //                     isHidden: it.not(it.any(
+    //                         it.licensedForSku(LicenseSkus.Enterprise),
+    //                         it.licensedForSku(LicenseSkus.E20))),
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                         it.stateIsFalse('ExperimentalSettings.ClientSideCertEnable'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.ExperimentalEnableDefaultChannelLeaveJoinMessages',
+    //                     label: t('admin.experimental.experimentalEnableDefaultChannelLeaveJoinMessages.title'),
+    //                     label_default: 'Enable Default Channel Leave/Join System Messages:',
+    //                     help_text: t('admin.experimental.experimentalEnableDefaultChannelLeaveJoinMessages.desc'),
+    //                     help_text_default: 'This setting determines whether team leave/join system messages are posted in the default town-square channel.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.ExperimentalEnableHardenedMode',
+    //                     label: t('admin.experimental.experimentalEnableHardenedMode.title'),
+    //                     label_default: 'Enable Hardened Mode:',
+    //                     help_text: t('admin.experimental.experimentalEnableHardenedMode.desc'),
+    //                     help_text_default: 'Enables a hardened mode for Mattermost that makes user experience trade-offs in the interest of security. See <link>documentation</link> to learn more.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/administration/config-settings.html#enable-hardened-mode-experimental'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnablePreviewFeatures',
+    //                     label: t('admin.experimental.enablePreviewFeatures.title'),
+    //                     label_default: 'Enable Preview Features:',
+    //                     help_text: t('admin.experimental.enablePreviewFeatures.desc'),
+    //                     help_text_default: 'When true, preview features can be enabled from **Settings > Advanced > Preview pre-release features**. When false, disables and hides preview features from **Settings > Advanced > Preview pre-release features**.',
+    //                     help_text_markdown: true,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ThemeSettings.EnableThemeSelection',
+    //                     label: t('admin.experimental.enableThemeSelection.title'),
+    //                     label_default: 'Enable Theme Selection:',
+    //                     help_text: t('admin.experimental.enableThemeSelection.desc'),
+    //                     help_text_default: 'Enables the **Display > Theme** tab in Settings so users can select their theme.',
+    //                     help_text_markdown: true,
+    //                     isHidden: it.any(
+    //                         it.not(it.licensed),
+    //                         it.licensedForSku('starter'),
+    //                     ),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ThemeSettings.AllowCustomThemes',
+    //                     label: t('admin.experimental.allowCustomThemes.title'),
+    //                     label_default: 'Allow Custom Themes:',
+    //                     help_text: t('admin.experimental.allowCustomThemes.desc'),
+    //                     help_text_default: 'Enables the **Display > Theme > Custom Theme** section in Settings.',
+    //                     help_text_markdown: true,
+    //                     isHidden: it.any(
+    //                         it.not(it.licensed),
+    //                         it.licensedForSku('starter'),
+    //                     ),
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                         it.stateIsFalse('ThemeSettings.EnableThemeSelection'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_DROPDOWN,
+    //                     key: 'ThemeSettings.DefaultTheme',
+    //                     label: t('admin.experimental.defaultTheme.title'),
+    //                     label_default: 'Default Theme:',
+    //                     help_text: t('admin.experimental.defaultTheme.desc'),
+    //                     help_text_default: 'Set a default theme that applies to all new users on the system.',
+    //                     help_text_markdown: true,
+    //                     options: [
+    //                         {
+    //                             value: 'denim',
+    //                             display_name: 'Denim',
+    //                             display_name_default: 'Denim',
+    //                         },
+    //                         {
+    //                             value: 'sapphire',
+    //                             display_name: 'Sapphire',
+    //                             display_name_default: 'Sapphire',
+    //                         },
+    //                         {
+    //                             value: 'quartz',
+    //                             display_name: 'Quartz',
+    //                             display_name_default: 'Quartz',
+    //                         },
+    //                         {
+    //                             value: 'indigo',
+    //                             display_name: 'Indigo',
+    //                             display_name_default: 'Indigo',
+    //                         },
+    //                         {
+    //                             value: 'onyx',
+    //                             display_name: 'Onyx',
+    //                             display_name_default: 'Onyx',
+    //                         },
+    //                     ],
+    //                     isHidden: it.any(
+    //                         it.not(it.licensed),
+    //                         it.licensedForSku('starter'),
+    //                     ),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableTutorial',
+    //                     label: t('admin.experimental.enableTutorial.title'),
+    //                     label_default: 'Enable Tutorial:',
+    //                     help_text: t('admin.experimental.enableTutorial.desc'),
+    //                     help_text_default: 'When true, users are prompted with a tutorial when they open Mattermost for the first time after account creation. When false, the tutorial is disabled, and users are placed in Town Square when they open Mattermost for the first time after account creation.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableOnboardingFlow',
+    //                     label: t('admin.experimental.enableOnboardingFlow.title'),
+    //                     label_default: 'Enable Onboarding:',
+    //                     help_text: t('admin.experimental.enableOnboardingFlow.desc'),
+    //                     help_text_default: 'When true, new users are shown steps to complete as part of an onboarding process',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ServiceSettings.EnableUserTypingMessages',
+    //                     label: t('admin.experimental.enableUserTypingMessages.title'),
+    //                     label_default: 'Enable User Typing Messages:',
+    //                     help_text: t('admin.experimental.enableUserTypingMessages.desc'),
+    //                     help_text_default: 'This setting determines whether "user is typing..." messages are displayed below the message box. Disabling the setting in larger deployments may improve server performance.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'ServiceSettings.TimeBetweenUserTypingUpdatesMilliseconds',
+    //                     label: t('admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.title'),
+    //                     label_default: 'User Typing Timeout:',
+    //                     help_text: t('admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.desc'),
+    //                     help_text_default: 'The number of milliseconds to wait between emitting user typing websocket events.',
+    //                     help_text_markdown: false,
+    //                     placeholder: t('admin.experimental.timeBetweenUserTypingUpdatesMilliseconds.example'),
+    //                     placeholder_default: 'E.g.: "5000"',
+    //                     isDisabled: it.any(
+    //                         it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                         it.stateIsFalse('ServiceSettings.EnableUserTypingMessages'),
+    //                     ),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_TEXT,
+    //                     key: 'TeamSettings.ExperimentalPrimaryTeam',
+    //                     label: t('admin.experimental.experimentalPrimaryTeam.title'),
+    //                     label_default: 'Primary Team:',
+    //                     help_text: t('admin.experimental.experimentalPrimaryTeam.desc'),
+    //                     help_text_default: 'The primary team of which users on the server are members. When a primary team is set, the options to join other teams or leave the primary team are disabled.',
+    //                     help_text_markdown: true,
+    //                     placeholder: t('admin.experimental.experimentalPrimaryTeam.example'),
+    //                     placeholder_default: 'E.g.: "teamname"',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ExperimentalSettings.UseNewSAMLLibrary',
+    //                     label: t('admin.experimental.experimentalUseNewSAMLLibrary.title'),
+    //                     label_default: 'Use Improved SAML Library (Beta):',
+    //                     help_text: t('admin.experimental.experimentalUseNewSAMLLibrary.desc'),
+    //                     help_text_default: 'Enable an updated SAML Library, which does not require the XML Security Library (xmlsec1) to be installed. Warning: Not all providers have been tested. If you experience issues, please contact <linkSupport>support</linkSupport>. Changing this setting requires a server restart before taking effect.',
+    //                     help_text_markdown: false,
+    //                     help_text_values: {
+    //                         linkSupport: (msg) => (
+    //                             <a
+    //                                 href='https://mattermost.com/support'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isHidden: true || it.not(it.licensedForFeature('SAML')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'SamlSettings.LoginButtonColor',
+    //                     label: t('admin.experimental.samlSettingsLoginButtonColor.title'),
+    //                     label_default: 'SAML Login Button Color:',
+    //                     help_text: t('admin.experimental.samlSettingsLoginButtonColor.desc'),
+    //                     help_text_default: 'Specify the color of the SAML login button for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('SAML')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'SamlSettings.LoginButtonBorderColor',
+    //                     label: t('admin.experimental.samlSettingsLoginButtonBorderColor.title'),
+    //                     label_default: 'SAML Login Button Border Color:',
+    //                     help_text: t('admin.experimental.samlSettingsLoginButtonBorderColor.desc'),
+    //                     help_text_default: 'Specify the color of the SAML login button border for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('SAML')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_COLOR,
+    //                     key: 'SamlSettings.LoginButtonTextColor',
+    //                     label: t('admin.experimental.samlSettingsLoginButtonTextColor.title'),
+    //                     label_default: 'SAML Login Button Text Color:',
+    //                     help_text: t('admin.experimental.samlSettingsLoginButtonTextColor.desc'),
+    //                     help_text_default: 'Specify the color of the SAML login button text for white labeling purposes. Use a hex code with a #-sign before the code. This setting only applies to the mobile apps.',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.licensedForFeature('SAML')),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'DisplaySettings.ExperimentalTimezone',
+    //                     label: t('admin.experimental.experimentalTimezone.title'),
+    //                     label_default: 'Timezone:',
+    //                     help_text: t('admin.experimental.experimentalTimezone.desc'),
+    //                     help_text_default: 'Select the timezone used for timestamps in the user interface and email notifications. When true, the Timezone section is visible in the Settings and a time zone is automatically assigned in the next active session. When false, the Timezone setting is hidden in the Settings.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'EmailSettings.UseChannelInEmailNotifications',
+    //                     label: t('admin.experimental.useChannelInEmailNotifications.title'),
+    //                     label_default: 'Use Channel Name in Email Notifications:',
+    //                     help_text: t('admin.experimental.useChannelInEmailNotifications.desc'),
+    //                     help_text_default: 'When true, channel and team name appears in email notification subject lines. Useful for servers using only one team. When false, only team name appears in email notification subject line.',
+    //                     help_text_markdown: false,
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_NUMBER,
+    //                     key: 'TeamSettings.UserStatusAwayTimeout',
+    //                     label: t('admin.experimental.userStatusAwayTimeout.title'),
+    //                     label_default: 'User Status Away Timeout:',
+    //                     help_text: t('admin.experimental.userStatusAwayTimeout.desc'),
+    //                     help_text_default: 'This setting defines the number of seconds after which the user’s status indicator changes to "Away", when they are away from Mattermost.',
+    //                     help_text_markdown: false,
+    //                     placeholder: t('admin.experimental.userStatusAwayTimeout.example'),
+    //                     placeholder_default: 'E.g.: "300"',
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ExperimentalSettings.EnableSharedChannels',
+    //                     label: t('admin.experimental.enableSharedChannels.title'),
+    //                     label_default: 'Enable Shared Channels:',
+    //                     help_text: t('admin.experimental.enableSharedChannels.desc'),
+    //                     help_text_default: 'Toggles Shared Channels',
+    //                     help_text_markdown: false,
+    //                     isHidden: it.not(it.any(
+    //                         it.licensedForFeature('SharedChannels'),
+    //                         it.licensedForSku(LicenseSkus.Enterprise),
+    //                         it.licensedForSku(LicenseSkus.Professional),
+    //                     )),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ExperimentalSettings.EnableAppBar',
+    //                     label: t('admin.experimental.enableAppBar.title'),
+    //                     label_default: 'Enable App Bar:',
+    //                     help_text: t('admin.experimental.enableAppBar.desc'),
+    //                     help_text_default: 'When true, all integrations move from the channel header to the App Bar. Channel header plugin icons that haven\'t explicitly registered an App Bar icon will be moved to the App Bar which may result in rendering issues. [See the documentation to learn more](https://docs.mattermost.com/welcome/what-changed-in-v70.html).',
+    //                     help_text_markdown: true,
+    //                     isHidden: it.licensedForFeature('Cloud'),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //                 {
+    //                     type: Constants.SettingsTypes.TYPE_BOOL,
+    //                     key: 'ExperimentalSettings.PatchPluginsReactDOM',
+    //                     label: t('admin.experimental.patchPluginsReactDOM.title'),
+    //                     label_default: 'Patch React DOM used by plugins:',
+    //                     help_text: t('admin.experimental.patchPluginsReactDOM.desc'),
+    //                     help_text_default: 'When true, client-side plugins will be patched to use the version of React DOM provided by the web app. This should only be enabled if plugins break after upgrading to Mattermost 7.6. The server must be restarted for this setting to take effect. See the <link>Important Upgrade Notes</link> for more information.',
+    //                     help_text_values: {
+    //                         link: (msg) => (
+    //                             <a
+    //                                 href='https://docs.mattermost.com/upgrade/important-upgrade-notes.html'
+    //                                 target='_blank'
+    //                                 rel='noreferrer'
+    //                             >
+    //                                 {msg}
+    //                             </a>
+    //                         ),
+    //                     },
+    //                     isHidden: it.licensedForFeature('Cloud'),
+    //                     isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURES)),
+    //                 },
+    //             ],
+    //         },
+    //     },
+    //     feature_flags: {
+    //         url: 'experimental/feature_flags',
+    //         title: t('admin.feature_flags.title'),
+    //         title_default: 'Feature Flags',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.FEATURE_FLAGS)),
+    //         ),
+    //         isDisabled: true,
+    //         searchableStrings: [
+    //             'admin.feature_flags.title',
+    //         ],
+    //         schema: {
+    //             id: 'Feature Flags',
+    //             component: FeatureFlags,
+    //         },
+    //     },
+    //     bleve: {
+    //         url: 'experimental/blevesearch',
+    //         title: t('admin.sidebar.blevesearch'),
+    //         title_default: 'Bleve',
+    //         isHidden: it.any(
+    //             it.configIsTrue('ExperimentalSettings', 'RestrictSystemAdmin'),
+    //             it.not(it.userHasReadPermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.BLEVE)),
+    //         ),
+    //         isDisabled: it.not(it.userHasWritePermissionOnResource(RESOURCE_KEYS.EXPERIMENTAL.BLEVE)),
+    //         searchableStrings: [
+    //             'admin.bleve.title',
+    //             'admin.bleve.enableIndexingTitle',
+    //             ['admin.bleve.enableIndexingDescription', {documentationLink: ''}],
+    //             'admin.bleve.enableIndexingDescription.documentationLinkText',
+    //             'admin.bleve.bulkIndexingTitle',
+    //             'admin.bleve.createJob.help',
+    //             'admin.bleve.purgeIndexesHelpText',
+    //             'admin.bleve.purgeIndexesButton',
+    //             'admin.bleve.purgeIndexesButton.label',
+    //             'admin.bleve.enableSearchingTitle',
+    //             'admin.bleve.enableSearchingDescription',
+    //         ],
+    //         schema: {
+    //             id: 'BleveSettings',
+    //             component: BleveSettings,
+    //         },
+    //     },
+    // },
 };
 
 t('admin.field_names.allowBannerDismissal');

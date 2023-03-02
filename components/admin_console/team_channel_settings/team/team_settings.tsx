@@ -4,6 +4,8 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {Link} from 'react-router-dom';
+
 import {t} from 'utils/i18n';
 import TeamList from 'components/admin_console/team_channel_settings/team/list';
 import AdminPanel from 'components/widgets/admin_console/admin_panel';
@@ -31,6 +33,19 @@ export function TeamsSettings(props: Props) {
                         titleDefault='Teams'
                         subtitleId={t('admin.team_settings.description')}
                         subtitleDefault='Manage team settings.'
+                        button={
+                            <Link
+                                to='/create_team'
+                                style={{all: 'unset'}}
+                            >
+                                <button>
+                                    <FormattedMessage
+                                        id='admin.userManagement.team.createteam'
+                                        defaultMessage='Create Team'
+                                    />
+                                </button>
+                            </Link>
+                        }
                     >
                         <TeamList/>
                     </AdminPanel>

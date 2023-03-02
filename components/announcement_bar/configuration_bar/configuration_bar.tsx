@@ -287,83 +287,86 @@ const ConfigurationAnnouncementBar = (props: Props) => {
             );
         }
 
-        if (!isTrialLicense(props.license) && isLicenseExpiring(props.license) && !props.dismissedExpiringLicense) {
-            const message = (<>
-                <img
-                    className='advisor-icon'
-                    src={alertIcon}
-                />
-                <FormattedMessage
-                    id='announcement_bar.error.license_expiring'
-                    defaultMessage='{licenseSku} license expires on {date, date, long}.'
-                    values={{
-                        date: new Date(parseInt(props.license?.ExpiresAt, 10)),
-                        licenseSku: getSkuDisplayName(props.license.SkuShortName, props.license.IsGovSku === 'true'),
-                    }}
-                />
-            </>);
-            return (
-                <AnnouncementBar
-                    showCloseButton={true}
-                    handleClose={dismissExpiringLicense}
-                    type={AnnouncementBarTypes.ANNOUNCEMENT}
-                    message={
-                        <div className='announcement-bar__configuration'>
-                            {message}
-                            <RenewalLink telemetryInfo={renewLinkTelemetry}/>
-                        </div>
-                    }
-                    tooltipMsg={message}
-                />
-            );
-        }
+        // TODO ? LICENSE
+        // if (!isTrialLicense(props.license) && isLicenseExpiring(props.license) && !props.dismissedExpiringLicense) {
+        //     const message = (<>
+        //         <img
+        //             className='advisor-icon'
+        //             src={alertIcon}
+        //         />
+        //         <FormattedMessage
+        //             id='announcement_bar.error.license_expiring'
+        //             defaultMessage='{licenseSku} license expires on {date, date, long}.'
+        //             values={{
+        //                 date: new Date(parseInt(props.license?.ExpiresAt, 10)),
+        //                 licenseSku: getSkuDisplayName(props.license.SkuShortName, props.license.IsGovSku === 'true'),
+        //             }}
+        //         />
+        //     </>);
+        //     return (
+        //         <AnnouncementBar
+        //             showCloseButton={true}
+        //             handleClose={dismissExpiringLicense}
+        //             type={AnnouncementBarTypes.ANNOUNCEMENT}
+        //             message={
+        //                 <div className='announcement-bar__configuration'>
+        //                     {message}
+        //                     <RenewalLink telemetryInfo={renewLinkTelemetry}/>
+        //                 </div>
+        //             }
+        //             tooltipMsg={message}
+        //         />
+        //     );
+        // }
 
-        if (props.license?.IsLicensed === 'false' &&
-                props.warnMetricsStatus) {
-            for (const status of Object.values(props.warnMetricsStatus)) {
-                const notice = getNoticeForWarnMetric(status);
-                if (!notice || notice.IsDismissed) {
-                    continue;
-                }
+        // TODO ? LICENSE
+        // if (props.license?.IsLicensed === 'false' &&
+        //         props.warnMetricsStatus) {
+        //     for (const status of Object.values(props.warnMetricsStatus)) {
+        //         const notice = getNoticeForWarnMetric(status);
+        //         if (!notice || notice.IsDismissed) {
+        //             continue;
+        //         }
 
-                return (
-                    <AnnouncementBar
-                        showCloseButton={notice.CanCloseBar}
-                        handleClose={notice.DismissFunc}
-                        type={notice.Type}
-                        showModal={notice.ShowModal}
-                        modalButtonText={t('announcement_bar.error.warn_metric_status.link')}
-                        modalButtonDefaultText='Learn more'
-                        warnMetricStatus={status}
-                        message={notice.Message}
-                    />
-                );
-            }
-        }
+        //         return (
+        //             <AnnouncementBar
+        //                 showCloseButton={notice.CanCloseBar}
+        //                 handleClose={notice.DismissFunc}
+        //                 type={notice.Type}
+        //                 showModal={notice.ShowModal}
+        //                 modalButtonText={t('announcement_bar.error.warn_metric_status.link')}
+        //                 modalButtonDefaultText='Learn more'
+        //                 warnMetricStatus={status}
+        //                 message={notice.Message}
+        //             />
+        //         );
+        //     }
+        // }
     } else {
         // Regular users
-        if (isLicensePastGracePeriod(props.license)) { //eslint-disable-line no-lonely-if
-            return (
-                <AnnouncementBar
-                    type={AnnouncementBarTypes.CRITICAL}
-                    message={
-                        <>
-                            <img
-                                className='advisor-icon'
-                                src={warningIcon}
-                            />
-                            <FormattedMessage
-                                id={AnnouncementBarMessages.LICENSE_PAST_GRACE}
-                                defaultMessage='{licenseSku} license is expired and some features may be disabled. Please contact your System Administrator for details.'
-                                values={{
-                                    licenseSku: getSkuDisplayName(props.license.SkuShortName, props.license.IsGovSku === 'true'),
-                                }}
-                            />
-                        </>
-                    }
-                />
-            );
-        }
+        // TODO ? LICENSE
+        // if (isLicensePastGracePeriod(props.license)) { //eslint-disable-line no-lonely-if
+        //     return (
+        //         <AnnouncementBar
+        //             type={AnnouncementBarTypes.CRITICAL}
+        //             message={
+        //                 <>
+        //                     <img
+        //                         className='advisor-icon'
+        //                         src={warningIcon}
+        //                     />
+        //                     <FormattedMessage
+        //                         id={AnnouncementBarMessages.LICENSE_PAST_GRACE}
+        //                         defaultMessage='{licenseSku} license is expired and some features may be disabled. Please contact your System Administrator for details.'
+        //                         values={{
+        //                             licenseSku: getSkuDisplayName(props.license.SkuShortName, props.license.IsGovSku === 'true'),
+        //                         }}
+        //                     />
+        //                 </>
+        //             }
+        //         />
+        //     );
+        // }
     }
 
     if (props.config?.SendEmailNotifications !== 'true' &&

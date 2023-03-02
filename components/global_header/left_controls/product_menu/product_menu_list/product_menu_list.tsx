@@ -103,13 +103,14 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
             <div onClick={onClick}>
                 <Menu.CloudTrial id='menuCloudTrial'/>
                 <Menu.ItemCloudLimit id='menuItemCloudLimit'/>
-                <SystemPermissionGate
+                {/* // TODO ? LICENSE */}
+                {/* <SystemPermissionGate
                     permissions={[Permissions.SYSCONSOLE_WRITE_ABOUT_EDITION_AND_LICENSE]}
                 >
                     <Menu.StartTrial
                         id='startTrial'
                     />
-                </SystemPermissionGate>
+                </SystemPermissionGate> */}
                 <SystemPermissionGate permissions={Permissions.SYSCONSOLE_READ_PERMISSIONS}>
                     <Menu.ItemLink
                         id='systemConsole'
@@ -136,7 +137,7 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
                         }
                     />
                 </SystemPermissionGate>
-                <Menu.ItemLink
+                {/* <Menu.ItemLink
                     id='integrations'
                     show={isMessaging && showIntegrations}
                     to={'/' + teamName + '/integrations'}
@@ -147,8 +148,8 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
                             glyph={'webhook-incoming'}
                         />
                     }
-                />
-                <Menu.ItemToggleModalRedux
+                /> */}
+                {/* <Menu.ItemToggleModalRedux
                     id='userGroups'
                     modalId={ModalIdentifiers.USER_GROUPS}
                     show={enableCustomUserGroups || isStarterFree || isFreeTrial}
@@ -203,8 +204,8 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
                             })}
                         />
                     )}
-                />
-                <TeamPermissionGate
+                /> */}
+                {/* <TeamPermissionGate
                     teamId={teamId}
                     permissions={[Permissions.SYSCONSOLE_WRITE_PLUGINS]}
                 >
@@ -221,8 +222,8 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
                             />
                         }
                     />
-                </TeamPermissionGate>
-                <Menu.ItemExternalLink
+                </TeamPermissionGate> */}
+                {/* <Menu.ItemExternalLink
                     id='nativeAppLink'
                     show={appDownloadLink && !UserAgent.isMobileApp()}
                     url={makeUrlSafe(appDownloadLink)}
@@ -245,7 +246,7 @@ const ProductMenuList = (props: Props): JSX.Element | null => {
                             glyph={'information-outline'}
                         />
                     }
-                />
+                /> */}
             </div>
         </Menu.Group>
     );

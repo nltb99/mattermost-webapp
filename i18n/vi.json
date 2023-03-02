@@ -5660,12 +5660,14 @@
   "workspace_limits.upgrade_reasons.free": "{planName} is restricted to {messagesLimit} message history and {storageLimit} file storage. You can delete items to free up space or upgrade to a paid plan.",
   "yourcomputer": "Máy tính của bạn",
 
-  "admin.userManagement.createUser.createUser": "Tạo Người Dùng",
+  "admin.userManagement.createUser.createUser": "Tạo người dùng",
   "admin.userManagement.createUser.email": "Email",
   "admin.userManagement.createUser.username": "Username",
+  "admin.userManagement.team.createteam": "Tạo đội",
   "admin.userManagement.createUser.password": "Password",
   "admin.userManagement.createUser.cancel": "Hủy",
   "admin.userManagement.createUser.create": "Tạo",
   "admin.userManagement.createUser.missing_email": "Hãy nhập email.",
-  "admin.userManagement.createUser.missing_username": "Hãy nhập username."
+  "admin.userManagement.createUser.missing_username": "Hãy nhập username.",
+  "admin.team_settings.team.team_code": "Mã mời"
 }
