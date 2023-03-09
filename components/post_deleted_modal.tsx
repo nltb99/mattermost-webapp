@@ -7,13 +7,16 @@ import {FormattedMessage} from 'react-intl';
 
 type Props = {
     onExited: () => void;
-}
+};
 
 type State = {
     show: boolean;
-}
+};
 
-export default class PostDeletedModal extends React.PureComponent<Props, State> {
+export default class PostDeletedModal extends React.PureComponent<
+Props,
+State
+> {
     constructor(props: Props) {
         super(props);
 
@@ -24,7 +27,7 @@ export default class PostDeletedModal extends React.PureComponent<Props, State> 
 
     private handleHide = () => {
         this.setState({show: false});
-    }
+    };
 
     public render(): JSX.Element {
         return (
